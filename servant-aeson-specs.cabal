@@ -8,8 +8,18 @@ build-type:     Simple
 cabal-version:  >= 1.10
 
 library
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -fno-warn-name-shadowing
   build-depends:
       base < 5
+    , aeson
+    , bytestring
+    , hspec
+    , QuickCheck
+  exposed-modules:
+      Test.Aeson.RoundtripSpecs
+      Test.Aeson.RoundtripSpecs.Internal
   default-language: Haskell2010
 
 test-suite spec
@@ -17,7 +27,18 @@ test-suite spec
   main-is: Spec.hs
   hs-source-dirs:
       test
+    , src
+  ghc-options: -Wall -fno-warn-name-shadowing
   build-depends:
       base < 5
+    , aeson
+    , bytestring
     , hspec
+    , QuickCheck
+    , hspec-core
+    , temporary
+  other-modules:
+      Test.Aeson.RoundtripSpecsSpec
+      Test.Aeson.RoundtripSpecs
+      Test.Aeson.RoundtripSpecs.Internal
   default-language: Haskell2010

@@ -3,13 +3,24 @@ version: "0.1"
 
 dependencies:
   - base < 5
+  - aeson
+  - bytestring
+  - hspec
+  - QuickCheck
+
+ghc-options:
+  -Wall -fno-warn-name-shadowing
 
 tests:
   spec:
     main: Spec.hs
     source-dirs:
       - test
+      - src
     dependencies:
-      - hspec
+      - hspec-core
+      - temporary
 
-library: {}
+library:
+  source-dirs:
+    - src
