@@ -17,7 +17,7 @@ library
     , bytestring
     , hspec
     , QuickCheck
-    , servant
+    , servant == 0.4.*
   exposed-modules:
       Servant.Aeson.RoundtripSpecs
       Test.Aeson.RoundtripSpecs
@@ -37,7 +37,7 @@ test-suite spec
     , bytestring
     , hspec
     , QuickCheck
-    , servant
+    , servant == 0.4.*
     , hspec-core
     , temporary
   other-modules:

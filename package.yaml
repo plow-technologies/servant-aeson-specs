@@ -7,7 +7,7 @@ dependencies:
   - bytestring
   - hspec
   - QuickCheck
-  - servant
+  - servant == 0.4.*
 
 ghc-options:
   -Wall -fno-warn-name-shadowing

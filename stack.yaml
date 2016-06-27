@@ -1,4 +1,5 @@
 resolver: lts-6.4
 packages:
   - '.'
-extra-deps: []
+extra-deps:
+  - servant-0.4.4.7
