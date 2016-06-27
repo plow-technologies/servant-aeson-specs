@@ -57,11 +57,17 @@ instance HasUsedTypes (a :<|> b) where
 instance HasUsedTypes (Get contentTypes response) where
   type UsedTypes (Get contentTypes response) = '[response]
 
+instance HasUsedTypes (Post contentTypes response) where
+  type UsedTypes (Post contentTypes response) = '[response]
+
 instance HasUsedTypes ((path :: Symbol) :> api) where
   type UsedTypes (path :> api) = UsedTypes api
 
 instance HasUsedTypes (ReqBody contentTypes body :> api) where
   type UsedTypes (ReqBody contentTypes body :> api) = body ': UsedTypes api
+
+instance HasUsedTypes (MatrixParam name a :> api) where
+  type UsedTypes (MatrixParam name a :> api) = UsedTypes api
 
 -- * type level (++)
 
