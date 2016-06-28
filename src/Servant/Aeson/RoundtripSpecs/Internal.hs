@@ -10,6 +10,8 @@
 module Servant.Aeson.RoundtripSpecs.Internal where
 
 import           Data.Aeson
+import           Data.Function
+import           Data.List
 import           Data.Proxy
 import           Data.Typeable
 import           GHC.TypeLits
@@ -31,37 +33,42 @@ roundtripSpecs = sequence_ . map snd . mkRoundtripSpecs
 usedTypes :: (HasRoundtripSpecs api) => Proxy api -> [TypeRep]
 usedTypes = map fst . mkRoundtripSpecs
 
+mkRoundtripSpecs :: (HasRoundtripSpecs api) => Proxy api -> [(TypeRep, Spec)]
+mkRoundtripSpecs = normalize . collectRoundtripSpecs
+  where
+    normalize = nubBy ((==) `on` fst)
+
 class HasRoundtripSpecs api where
-  mkRoundtripSpecs :: Proxy api -> [(TypeRep, Spec)]
+  collectRoundtripSpecs :: Proxy api -> [(TypeRep, Spec)]
 
 instance (HasRoundtripSpecs a, HasRoundtripSpecs b) => HasRoundtripSpecs (a :<|> b) where
-  mkRoundtripSpecs Proxy =
-    mkRoundtripSpecs (Proxy :: Proxy a) ++
-    mkRoundtripSpecs (Proxy :: Proxy b)
+  collectRoundtripSpecs Proxy =
+    collectRoundtripSpecs (Proxy :: Proxy a) ++
+    collectRoundtripSpecs (Proxy :: Proxy b)
 
 instance (MkSpec response) =>
   HasRoundtripSpecs (Get contentTypes response) where
 
-  mkRoundtripSpecs Proxy = do
+  collectRoundtripSpecs Proxy = do
     mkSpec (Proxy :: Proxy response)
 
 instance (MkSpec response) =>
   HasRoundtripSpecs (Post contentTypes response) where
 
-  mkRoundtripSpecs Proxy = mkSpec (Proxy :: Proxy response)
+  collectRoundtripSpecs Proxy = mkSpec (Proxy :: Proxy response)
 
 instance (MkSpec body, HasRoundtripSpecs api) =>
   HasRoundtripSpecs (ReqBody contentTypes body :> api) where
 
-  mkRoundtripSpecs Proxy =
+  collectRoundtripSpecs Proxy =
     mkSpec (Proxy :: Proxy body) ++
-    mkRoundtripSpecs (Proxy :: Proxy api)
+    collectRoundtripSpecs (Proxy :: Proxy api)
 
 instance HasRoundtripSpecs api => HasRoundtripSpecs ((path :: Symbol) :> api) where
-  mkRoundtripSpecs Proxy = mkRoundtripSpecs (Proxy :: Proxy api)
+  collectRoundtripSpecs Proxy = collectRoundtripSpecs (Proxy :: Proxy api)
 
 instance HasRoundtripSpecs api => HasRoundtripSpecs (MatrixParam name a :> api) where
-  mkRoundtripSpecs Proxy = mkRoundtripSpecs (Proxy :: Proxy api)
+  collectRoundtripSpecs Proxy = collectRoundtripSpecs (Proxy :: Proxy api)
 
 -- 'mkSpec' has to be implemented as a method of a separate class, because we
 -- want to be able to have a specialized implementation for lists.

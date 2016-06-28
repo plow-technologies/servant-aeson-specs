@@ -59,6 +59,9 @@ spec = do
     it "traverses :<|>" $ do
       usedTypes reqBodyFailApi `shouldBe` [faultyRoundtripRep, boolRep]
 
+    it "returns types only ones (i.e. nubbed)" $ do
+      usedTypes doubleTypesApi `shouldBe` [boolRep]
+
 reqBodyFailApi :: Proxy (ReqBody '[JSON] FaultyRoundtrip :> Get '[JSON] Bool)
 reqBodyFailApi = Proxy
 
@@ -67,6 +70,9 @@ getFailApi = Proxy
 
 getBoolList :: Proxy (Get '[JSON] [Bool])
 getBoolList = Proxy
+
+doubleTypesApi :: Proxy (ReqBody '[JSON] Bool :> Get '[JSON] Bool)
+doubleTypesApi = Proxy
 
 faultyRoundtripRep :: TypeRep
 faultyRoundtripRep = typeRep (Proxy :: Proxy FaultyRoundtrip)
