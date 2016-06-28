@@ -22,6 +22,10 @@ spec = do
       roundtripSpecs getFailApi `shouldTestAs`
         Summary 1 1
 
+    context "when it finds a list of something" $ do
+      it "returns only the element type" $ do
+        usedTypes getBoolList `shouldBe` [boolRep]
+
   describe "usedTypes" $ do
     it "extracts types from ReqBody" $ do
       usedTypes reqBodyFailApi `shouldBe`
@@ -36,21 +40,16 @@ spec = do
         [faultyRoundtripRep]
 
     it "traverses :<|>" $ do
-      let api :: Proxy (Get '[JSON] FaultyRoundtrip :<|> Get '[JSON] Bool)
-          api = Proxy
-      usedTypes api `shouldBe` [faultyRoundtripRep, boolRep]
+      usedTypes reqBodyFailApi `shouldBe` [faultyRoundtripRep, boolRep]
 
-type ReqBodyFailApi =
-  ReqBody '[JSON] FaultyRoundtrip :> Get '[JSON] Bool
-
-reqBodyFailApi :: Proxy ReqBodyFailApi
+reqBodyFailApi :: Proxy (ReqBody '[JSON] FaultyRoundtrip :> Get '[JSON] Bool)
 reqBodyFailApi = Proxy
 
-type GetFailApi =
-  Get '[JSON] FaultyRoundtrip
-
-getFailApi :: Proxy GetFailApi
+getFailApi :: Proxy (Get '[JSON] FaultyRoundtrip)
 getFailApi = Proxy
+
+getBoolList :: Proxy (Get '[JSON] [Bool])
+getBoolList = Proxy
 
 faultyRoundtripRep :: TypeRep
 faultyRoundtripRep = typeRep (Proxy :: Proxy FaultyRoundtrip)

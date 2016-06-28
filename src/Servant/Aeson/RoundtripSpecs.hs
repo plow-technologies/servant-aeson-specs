@@ -31,31 +31,26 @@ roundtripSpecs = sequence_ . map snd . mkRoundtripSpecs
 usedTypes :: (HasRoundtripSpecs api) => Proxy api -> [TypeRep]
 usedTypes = map fst . mkRoundtripSpecs
 
-mkSpec :: (Typeable a, Eq a, Show a, Arbitrary a, ToJSON a, FromJSON a) =>
-  Proxy a -> [(TypeRep, Spec)]
-mkSpec proxy =
-  [(typeRep proxy, genericAesonRoundtrip proxy)]
-
 class HasRoundtripSpecs api where
   mkRoundtripSpecs :: Proxy api -> [(TypeRep, Spec)]
 
 instance (HasRoundtripSpecs a, HasRoundtripSpecs b) => HasRoundtripSpecs (a :<|> b) where
-  mkRoundtripSpecs p =
+  mkRoundtripSpecs Proxy =
     mkRoundtripSpecs (Proxy :: Proxy a) ++
     mkRoundtripSpecs (Proxy :: Proxy b)
 
-instance (Eq response, Show response, Typeable response, Arbitrary response, ToJSON response, FromJSON response) =>
+instance (MkSpec response) =>
   HasRoundtripSpecs (Get contentTypes response) where
 
   mkRoundtripSpecs Proxy = do
     mkSpec (Proxy :: Proxy response)
 
-instance (Eq response, Show response, Typeable response, Arbitrary response, ToJSON response, FromJSON response) =>
+instance (MkSpec response) =>
   HasRoundtripSpecs (Post contentTypes response) where
 
   mkRoundtripSpecs Proxy = mkSpec (Proxy :: Proxy response)
 
-instance (Eq body, Show body, Typeable body, Arbitrary body, ToJSON body, FromJSON body, HasRoundtripSpecs api) =>
+instance (MkSpec body, HasRoundtripSpecs api) =>
   HasRoundtripSpecs (ReqBody contentTypes body :> api) where
 
   mkRoundtripSpecs Proxy =
@@ -67,3 +62,21 @@ instance HasRoundtripSpecs api => HasRoundtripSpecs ((path :: Symbol) :> api) wh
 
 instance HasRoundtripSpecs api => HasRoundtripSpecs (MatrixParam name a :> api) where
   mkRoundtripSpecs Proxy = mkRoundtripSpecs (Proxy :: Proxy api)
+
+-- 'mkSpec' has to be implemented as a method of a separate class, because we
+-- want to be able to have a specialized implementation for lists.
+class MkSpec a where
+  mkSpec :: Proxy a -> [(TypeRep, Spec)]
+
+instance (Typeable a, Eq a, Show a, Arbitrary a, ToJSON a, FromJSON a) => MkSpec a where
+
+  mkSpec proxy = [(typeRep proxy, genericAesonRoundtrip proxy)]
+
+-- This will only test json serialization of the element type. As we trust aeson
+-- to do the right thing for lists, we don't need to test that. (This speeds up
+-- test suites immensely.)
+instance {-# OVERLAPPING #-}
+  (Eq a, Show a, Typeable a, Arbitrary a, ToJSON a, FromJSON a) =>
+  MkSpec [a] where
+
+  mkSpec Proxy = mkSpec (Proxy :: Proxy a)
