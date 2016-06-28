@@ -1,85 +1,63 @@
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE TypeOperators #-}
-{-# LANGUAGE UndecidableInstances #-}
 
+-- | If you're using [servant](http://haskell-servant.readthedocs.org/) with
+-- either [servant-client](http://hackage.haskell.org/package/servant-client)
+-- or [servant-server](http://hackage.haskell.org/package/servant-server) there
+-- will be types included in your APIs that servant will convert to and from
+-- JSON. (At least for most common APIs.) 'roundtripSpecs' allows you to
+-- generically obtain a test-suite, that makes sure for those types, that they
+-- can be serialized to JSON and read back to Haskell successfully.
+--
+-- Here's an example:
+--
+-- >>> :set -XTypeOperators
+-- >>> :set -XDataKinds
+-- >>> :set -XDeriveGeneric
+--
+-- >>> import Servant.API
+-- >>> import Test.Hspec (hspec)
+-- >>> import GHC.Generics (Generic)
+-- >>> import Data.Aeson (ToJSON, FromJSON)
+-- >>> import Test.QuickCheck (Arbitrary(..), oneof)
+--
+-- >>> data Foo = Foo { a :: String, b :: Int } deriving (Eq, Show, Generic)
+-- >>> instance FromJSON Foo
+-- >>> instance ToJSON Foo
+-- >>> :{
+--   instance Arbitrary Foo where
+--     arbitrary = Foo <$> arbitrary <*> arbitrary
+-- :}
+--
+-- >>> data Bar = BarA | BarB { bar :: Bool } deriving (Eq, Show, Generic)
+-- >>> instance FromJSON Bar
+-- >>> instance ToJSON Bar
+-- >>> :{
+--   instance Arbitrary Bar where
+--     arbitrary = oneof $
+--       pure BarA :
+--       (BarB <$> arbitrary) :
+--       []
+-- :}
+--
+--
+-- >>> type Api = "post" :> ReqBody '[JSON] Foo :> Get '[JSON] Bar
+-- >>> let api = Proxy :: Proxy Api
+-- >>> hspec $ roundtripSpecs api
+-- <BLANKLINE>
+-- JSON encoding of Foo
+--   allows to encode values with aeson and read them back
+-- JSON encoding of Bar
+--   allows to encode values with aeson and read them back
+-- <BLANKLINE>
+-- Finished in ... seconds
+-- 2 examples, 0 failures
 module Servant.Aeson.RoundtripSpecs (
   roundtripSpecs,
-  HasRoundtripSpecs(..),
   usedTypes,
 
   -- * re-exports
   Proxy(..),
 ) where
 
-import           Data.Aeson
 import           Data.Proxy
-import           Data.Typeable
-import           GHC.TypeLits
-import           Servant.API
-import           Test.Hspec
-import           Test.QuickCheck
 
-import           Test.Aeson.RoundtripSpecs.Internal
-
-roundtripSpecs :: (HasRoundtripSpecs api) => Proxy api -> Spec
-roundtripSpecs = sequence_ . map snd . mkRoundtripSpecs
-
-usedTypes :: (HasRoundtripSpecs api) => Proxy api -> [TypeRep]
-usedTypes = map fst . mkRoundtripSpecs
-
-class HasRoundtripSpecs api where
-  mkRoundtripSpecs :: Proxy api -> [(TypeRep, Spec)]
-
-instance (HasRoundtripSpecs a, HasRoundtripSpecs b) => HasRoundtripSpecs (a :<|> b) where
-  mkRoundtripSpecs Proxy =
-    mkRoundtripSpecs (Proxy :: Proxy a) ++
-    mkRoundtripSpecs (Proxy :: Proxy b)
-
-instance (MkSpec response) =>
-  HasRoundtripSpecs (Get contentTypes response) where
-
-  mkRoundtripSpecs Proxy = do
-    mkSpec (Proxy :: Proxy response)
-
-instance (MkSpec response) =>
-  HasRoundtripSpecs (Post contentTypes response) where
-
-  mkRoundtripSpecs Proxy = mkSpec (Proxy :: Proxy response)
-
-instance (MkSpec body, HasRoundtripSpecs api) =>
-  HasRoundtripSpecs (ReqBody contentTypes body :> api) where
-
-  mkRoundtripSpecs Proxy =
-    mkSpec (Proxy :: Proxy body) ++
-    mkRoundtripSpecs (Proxy :: Proxy api)
-
-instance HasRoundtripSpecs api => HasRoundtripSpecs ((path :: Symbol) :> api) where
-  mkRoundtripSpecs Proxy = mkRoundtripSpecs (Proxy :: Proxy api)
-
-instance HasRoundtripSpecs api => HasRoundtripSpecs (MatrixParam name a :> api) where
-  mkRoundtripSpecs Proxy = mkRoundtripSpecs (Proxy :: Proxy api)
-
--- 'mkSpec' has to be implemented as a method of a separate class, because we
--- want to be able to have a specialized implementation for lists.
-class MkSpec a where
-  mkSpec :: Proxy a -> [(TypeRep, Spec)]
-
-instance (Typeable a, Eq a, Show a, Arbitrary a, ToJSON a, FromJSON a) => MkSpec a where
-
-  mkSpec proxy = [(typeRep proxy, genericAesonRoundtrip proxy)]
-
--- This will only test json serialization of the element type. As we trust aeson
--- to do the right thing for lists, we don't need to test that. (This speeds up
--- test suites immensely.)
-instance {-# OVERLAPPING #-}
-  (Eq a, Show a, Typeable a, Arbitrary a, ToJSON a, FromJSON a) =>
-  MkSpec [a] where
-
-  mkSpec Proxy = [(typeRep proxy, genericAesonRoundtripWithNote proxy (Just note))]
-    where
-      proxy = Proxy :: Proxy a
-      note = "(as element-type in [])"
+import           Servant.Aeson.RoundtripSpecs.Internal
