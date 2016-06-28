@@ -5,11 +5,24 @@ module Servant.Aeson.RoundtripSpecsSpec where
 
 import           Data.Typeable
 import           Servant.API
+import           System.IO
+import           System.IO.Temp
 import           Test.Hspec
 import           Test.Hspec.Core.Runner
 
 import           Servant.Aeson.RoundtripSpecs
 import           Test.Aeson.RoundtripSpecsSpec
+
+-- ignores the Summary
+hspecOutput :: Spec -> IO String
+hspecOutput spec =
+  withSystemTempFile "servant-aeson-specs" $ \ file handle -> do
+    let config = defaultConfig{
+          configOutputFile = Left handle
+        }
+    _ <- hspecWithResult config spec
+    hClose handle
+    readFile file
 
 spec :: Spec
 spec = do
@@ -25,6 +38,10 @@ spec = do
     context "when it finds a list of something" $ do
       it "returns only the element type" $ do
         usedTypes getBoolList `shouldBe` [boolRep]
+
+      it "mentions that the type was wrapped in a list" $ do
+        output <- hspecOutput $ roundtripSpecs getBoolList
+        output `shouldContain` "(as element-type in [])"
 
   describe "usedTypes" $ do
     it "extracts types from ReqBody" $ do

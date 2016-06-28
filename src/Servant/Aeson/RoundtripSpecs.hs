@@ -23,7 +23,7 @@ import           Servant.API
 import           Test.Hspec
 import           Test.QuickCheck
 
-import           Test.Aeson.RoundtripSpecs
+import           Test.Aeson.RoundtripSpecs.Internal
 
 roundtripSpecs :: (HasRoundtripSpecs api) => Proxy api -> Spec
 roundtripSpecs = sequence_ . map snd . mkRoundtripSpecs
@@ -79,4 +79,7 @@ instance {-# OVERLAPPING #-}
   (Eq a, Show a, Typeable a, Arbitrary a, ToJSON a, FromJSON a) =>
   MkSpec [a] where
 
-  mkSpec Proxy = mkSpec (Proxy :: Proxy a)
+  mkSpec Proxy = [(typeRep proxy, genericAesonRoundtripWithNote proxy (Just note))]
+    where
+      proxy = Proxy :: Proxy a
+      note = "(as element-type in [])"
