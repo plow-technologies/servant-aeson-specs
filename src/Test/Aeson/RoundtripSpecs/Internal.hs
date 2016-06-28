@@ -7,7 +7,7 @@ import           Control.Arrow
 import           Control.Exception
 import qualified Data.Aeson as Aeson
 import           Data.Aeson as Aeson hiding (encode)
-import           Data.ByteString.Lazy
+import           Data.ByteString.Lazy (ByteString)
 import           Data.Typeable
 import           Test.Hspec
 import           Test.QuickCheck
@@ -32,10 +32,16 @@ genericAesonRoundtripWithNote :: forall a .
   Proxy a -> Maybe String -> Spec
 genericAesonRoundtripWithNote proxy mNote = do
   let note = maybe "" (" " ++) mNote
-  describe ("JSON encoding of " ++ show (typeRep proxy) ++ note) $ do
+  describe ("JSON encoding of " ++ addBrackets (show (typeRep proxy)) ++ note) $ do
     it "allows to encode values with aeson and read them back" $ do
       shouldBeIdentity proxy $
         Aeson.encode >>> aesonDecodeIO
+
+addBrackets :: String -> String
+addBrackets s =
+  if ' ' `elem` s
+    then "(" ++ s ++ ")"
+    else s
 
 -- | [hspec](http://hspec.github.io/) style combinator to easily write tests
 -- that check the a given operation returns the same value it was given, e.g.
