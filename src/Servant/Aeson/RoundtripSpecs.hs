@@ -43,9 +43,9 @@
 -- >>> let api = Proxy :: Proxy Api
 -- >>> hspec $ roundtripSpecs api
 -- <BLANKLINE>
--- JSON encoding of Foo
---   allows to encode values with aeson and read them back
 -- JSON encoding of Bar
+--   allows to encode values with aeson and read them back
+-- JSON encoding of Foo
 --   allows to encode values with aeson and read them back
 -- <BLANKLINE>
 -- Finished in ... seconds

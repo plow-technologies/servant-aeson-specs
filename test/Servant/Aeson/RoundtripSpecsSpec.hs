@@ -45,7 +45,7 @@ spec = do
 
   describe "usedTypes" $ do
     it "extracts types from ReqBody" $ do
-      usedTypes reqBodyFailApi `shouldBe`
+      usedTypes reqBodyFailApi `shouldMatchList`
         [faultyRoundtripRep, boolRep]
 
     it "extracts types from Get" $ do
@@ -57,10 +57,13 @@ spec = do
         [faultyRoundtripRep]
 
     it "traverses :<|>" $ do
-      usedTypes reqBodyFailApi `shouldBe` [faultyRoundtripRep, boolRep]
+      usedTypes reqBodyFailApi `shouldMatchList` [faultyRoundtripRep, boolRep]
 
     it "returns types only ones (i.e. nubbed)" $ do
       usedTypes doubleTypesApi `shouldBe` [boolRep]
+
+    it "returns types sorted by name" $ do
+      usedTypes reqBodyFailApi `shouldBe` [boolRep, faultyRoundtripRep]
 
 reqBodyFailApi :: Proxy (ReqBody '[JSON] FaultyRoundtrip :> Get '[JSON] Bool)
 reqBodyFailApi = Proxy

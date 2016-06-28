@@ -36,7 +36,7 @@ usedTypes = map fst . mkRoundtripSpecs
 mkRoundtripSpecs :: (HasRoundtripSpecs api) => Proxy api -> [(TypeRep, Spec)]
 mkRoundtripSpecs = normalize . collectRoundtripSpecs
   where
-    normalize = nubBy ((==) `on` fst)
+    normalize = nubBy ((==) `on` fst) . sortBy (compare `on` (show . fst))
 
 class HasRoundtripSpecs api where
   collectRoundtripSpecs :: Proxy api -> [(TypeRep, Spec)]
