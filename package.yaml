@@ -16,6 +16,10 @@ dependencies:
   - hspec
   - QuickCheck
   - servant == 0.4.*
+  - directory
+  - filepath
+  - random
+  - aeson-pretty
 
 ghc-options:
   -Wall -fno-warn-name-shadowing
@@ -30,6 +34,11 @@ tests:
       - hspec-core
       - temporary
       - doctest
+      - mockery
+      - silently
+      - quickcheck-instances
+      - string-conversions
+      - text
 
 library:
   source-dirs:

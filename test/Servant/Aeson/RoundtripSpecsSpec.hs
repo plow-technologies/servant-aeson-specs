@@ -12,6 +12,7 @@ import           Test.Hspec.Core.Runner
 
 import           Servant.Aeson.RoundtripSpecs
 import           Test.Aeson.RoundtripSpecsSpec
+import           Test.Utils
 
 -- ignores the Summary
 hspecOutput :: Spec -> IO String

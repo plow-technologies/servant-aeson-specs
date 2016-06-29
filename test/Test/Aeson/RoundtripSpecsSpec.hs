@@ -7,28 +7,12 @@ module Test.Aeson.RoundtripSpecsSpec where
 import           Control.Applicative
 import           Data.Aeson
 import           GHC.Generics
-import           System.IO
-import           System.IO.Temp
 import           Test.Hspec
 import           Test.Hspec.Core.Runner
 import           Test.QuickCheck
 
 import           Test.Aeson.RoundtripSpecs
-
-hspecSilently :: Spec -> IO Summary
-hspecSilently s = do
-  withSystemTempFile "ghcjs-hspec-jsval-aeson" $ \ path handle -> do
-    hClose handle
-    let silentConfig :: Test.Hspec.Core.Runner.Config
-        silentConfig = defaultConfig{
-          configOutputFile = Right path
-        }
-    hspecWithResult silentConfig s
-
-shouldTestAs :: Spec -> Summary -> IO ()
-shouldTestAs spec expected = do
-  summary <- hspecSilently spec
-  summary `shouldBe` expected
+import           Test.Utils
 
 spec :: Spec
 spec = do
