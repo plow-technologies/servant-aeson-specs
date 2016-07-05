@@ -19,8 +19,8 @@ import           Servant.API
 import           Test.Hspec
 import           Test.QuickCheck
 
-import           Test.Aeson.GoldenSpecs.Internal
-import           Test.Aeson.RoundtripSpecs.Internal
+import           Test.Aeson.Internal.GoldenSpecs
+import           Test.Aeson.Internal.RoundtripSpecs
 
 -- | Allows to obtain roundtrip tests for JSON serialization for all types used
 -- in a [servant](http://haskell-servant.readthedocs.org/) api.

@@ -39,9 +39,9 @@ library
       Servant.Aeson.RoundtripSpecs
       Servant.Aeson.RoundtripSpecs.Internal
       Test.Aeson.GoldenSpecs
-      Test.Aeson.GoldenSpecs.Internal
+      Test.Aeson.Internal.GoldenSpecs
+      Test.Aeson.Internal.RoundtripSpecs
       Test.Aeson.RoundtripSpecs
-      Test.Aeson.RoundtripSpecs.Internal
   default-language: Haskell2010
 
 test-suite spec
@@ -81,7 +81,7 @@ test-suite spec
       Servant.Aeson.RoundtripSpecs
       Servant.Aeson.RoundtripSpecs.Internal
       Test.Aeson.GoldenSpecs
-      Test.Aeson.GoldenSpecs.Internal
+      Test.Aeson.Internal.GoldenSpecs
+      Test.Aeson.Internal.RoundtripSpecs
       Test.Aeson.RoundtripSpecs
-      Test.Aeson.RoundtripSpecs.Internal
   default-language: Haskell2010

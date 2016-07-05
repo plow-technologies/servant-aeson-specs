@@ -7,4 +7,4 @@ module Test.Aeson.GoldenSpecs (
 ) where
 
 import           Data.Proxy
-import           Test.Aeson.GoldenSpecs.Internal
+import           Test.Aeson.Internal.GoldenSpecs

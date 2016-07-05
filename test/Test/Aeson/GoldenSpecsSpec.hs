@@ -17,7 +17,7 @@ import           Test.Hspec
 import           Test.Mockery.Directory
 import           Test.QuickCheck.Instances ()
 
-import           Test.Aeson.GoldenSpecs.Internal
+import           Test.Aeson.Internal.GoldenSpecs
 import           Test.Utils
 
 textP :: Proxy Text

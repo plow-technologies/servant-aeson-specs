@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module Test.Aeson.GoldenSpecs.Internal where
+module Test.Aeson.Internal.GoldenSpecs where
 
 import           Control.Exception
 import           Control.Monad
@@ -21,7 +21,7 @@ import           Test.QuickCheck
 import           Test.QuickCheck.Gen
 import           Test.QuickCheck.Random
 
-import           Test.Aeson.RoundtripSpecs.Internal
+import           Test.Aeson.Internal.RoundtripSpecs
 
 goldenSpecs :: (Eq a, Show a, Typeable a, Arbitrary a, ToJSON a, FromJSON a) =>
   Proxy a -> Spec

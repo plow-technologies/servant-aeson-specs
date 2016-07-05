@@ -10,4 +10,4 @@ module Test.Aeson.RoundtripSpecs (
 
 import           Data.Proxy
 
-import           Test.Aeson.RoundtripSpecs.Internal
+import           Test.Aeson.Internal.RoundtripSpecs

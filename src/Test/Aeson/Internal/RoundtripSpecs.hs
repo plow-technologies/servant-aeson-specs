@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
 -- | Internal module, use at your own risk.
-module Test.Aeson.RoundtripSpecs.Internal where
+module Test.Aeson.Internal.RoundtripSpecs where
 
 import           Control.Arrow
 import           Control.Exception
