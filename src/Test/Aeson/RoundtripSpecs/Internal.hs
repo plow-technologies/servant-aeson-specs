@@ -15,17 +15,17 @@ import           Test.QuickCheck
 -- | Allows to obtain a roundtrip test to check whether values of the given type
 -- can be successfully converted to JSON and back.
 --
--- 'genericAesonRoundtrip' will
+-- 'roundtripSpecs' will
 --
 -- - create random values (using 'Arbitrary'),
 -- - convert them into JSON (using 'ToJSON'),
 -- - read them back into Haskell (using 'FromJSON') and
 -- - make sure that the result is the same as the value it started with
 --   (using 'Eq').
-genericAesonRoundtrip :: forall a .
+roundtripSpecs :: forall a .
   (Typeable a, Eq a, Show a, Arbitrary a, ToJSON a, FromJSON a) =>
   Proxy a -> Spec
-genericAesonRoundtrip proxy = genericAesonRoundtripWithNote proxy Nothing
+roundtripSpecs proxy = genericAesonRoundtripWithNote proxy Nothing
 
 genericAesonRoundtripWithNote :: forall a .
   (Typeable a, Eq a, Show a, Arbitrary a, ToJSON a, FromJSON a) =>

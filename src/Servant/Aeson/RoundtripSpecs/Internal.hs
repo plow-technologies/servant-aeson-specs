@@ -25,9 +25,9 @@ import           Test.Aeson.RoundtripSpecs.Internal
 -- | Allows to obtain roundtrip tests for JSON serialization for all types used
 -- in a [servant](http://haskell-servant.readthedocs.org/) api.
 --
--- See also 'Test.Aeson.RoundtripSpecs.genericAesonRoundtrip'.
-roundtripSpecs :: (HasRoundtripSpecs api) => Proxy api -> Spec
-roundtripSpecs = sequence_ . map roundtrip . mkRoundtripSpecs
+-- See also 'Test.Aeson.RoundtripSpecs.roundtripSpecs'.
+apiRoundtripSpecs :: (HasRoundtripSpecs api) => Proxy api -> Spec
+apiRoundtripSpecs = sequence_ . map roundtrip . mkRoundtripSpecs
 
 -- | Allows to retrieve a list of all used types in a
 -- [servant](http://haskell-servant.readthedocs.org/) api as 'TypeRep's.
@@ -88,7 +88,7 @@ instance (Typeable a, Eq a, Show a, Arbitrary a, ToJSON a, FromJSON a) => MkSpec
   mkSpec proxy = pure $
     TypeSpec {
       typ = typeRep proxy,
-      roundtrip = genericAesonRoundtrip proxy,
+      roundtrip = roundtripSpecs proxy,
       golden = goldenSpecs proxy
     }
 

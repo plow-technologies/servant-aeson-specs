@@ -14,15 +14,15 @@ import           Servant.Aeson.GoldenSpecs
 
 spec :: Spec
 spec = do
-  describe "servantGoldenSpecs" $ do
+  describe "apiGoldenSpecs" $ do
     it "writes files for used types" $ do
       inTempDirectory $ do
-        _ <- hspecSilently $ servantGoldenSpecs (Proxy :: Proxy (Get '[JSON] Bool))
+        _ <- hspecSilently $ apiGoldenSpecs (Proxy :: Proxy (Get '[JSON] Bool))
         doesFileExist "golden.json/Bool.json" `shouldReturn` True
 
     it "raises errors for non-matching golden files" $ do
       inTempDirectory $ do
         createDirectoryIfMissing True "golden.json"
         writeFile "golden.json/Bool.json" "foo"
-        servantGoldenSpecs (Proxy :: Proxy (Get '[JSON] Bool)) `shouldTestAs`
+        apiGoldenSpecs (Proxy :: Proxy (Get '[JSON] Bool)) `shouldTestAs`
           Summary 1 1

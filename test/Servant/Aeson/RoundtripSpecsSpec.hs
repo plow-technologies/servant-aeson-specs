@@ -30,13 +30,13 @@ hspecOutput spec =
 
 spec :: Spec
 spec = do
-  describe "roundtripSpecs" $ do
+  describe "apiRoundtripSpecs" $ do
     it "detects failures in types from ReqBody" $ do
-      roundtripSpecs reqBodyFailApi `shouldTestAs`
+      apiRoundtripSpecs reqBodyFailApi `shouldTestAs`
         Summary 2 1
 
     it "detects failures in types from Get" $ do
-      roundtripSpecs getFailApi `shouldTestAs`
+      apiRoundtripSpecs getFailApi `shouldTestAs`
         Summary 1 1
 
     context "when it finds a list of something" $ do
@@ -44,12 +44,12 @@ spec = do
         usedTypes getBoolList `shouldBe` [boolRep]
 
       it "mentions that the type was wrapped in a list" $ do
-        output <- hspecOutput $ roundtripSpecs getBoolList
+        output <- hspecOutput $ apiRoundtripSpecs getBoolList
         output `shouldContain` "(as element-type in [])"
 
     it "does not write any files" $ do
       inTempDirectory $ do
-        _ <- hspecSilently $ roundtripSpecs reqBodyFailApi
+        _ <- hspecSilently $ apiRoundtripSpecs reqBodyFailApi
         sort <$> getDirectoryContents "." `shouldReturn` [".", ".."]
 
   describe "usedTypes" $ do

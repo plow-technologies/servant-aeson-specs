@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Test.Aeson.RoundtripSpecs (
-  genericAesonRoundtrip,
+  roundtripSpecs,
   shouldBeIdentity,
 
   -- * re-exports

@@ -16,16 +16,16 @@ import           Test.Utils
 
 spec :: Spec
 spec = do
-  describe "genericAesonRoundtrip" $ do
+  describe "roundtripSpecs" $ do
     it "detects incompatible json encodings" $ do
-      genericAesonRoundtrip faultyRoundtripProxy `shouldTestAs` Summary 1 1
+      roundtripSpecs faultyRoundtripProxy `shouldTestAs` Summary 1 1
 
     context "when used with compatible encodings" $ do
       it "creates passing tests" $ do
-        genericAesonRoundtrip correctProxy `shouldTestAs` Summary 1 0
+        roundtripSpecs correctProxy `shouldTestAs` Summary 1 0
 
       it "creates passing tests for sum types" $ do
-        genericAesonRoundtrip correctSumProxy `shouldTestAs` Summary 1 0
+        roundtripSpecs correctSumProxy `shouldTestAs` Summary 1 0
 
 -- | Type where roundtrips don't work.
 data FaultyRoundtrip

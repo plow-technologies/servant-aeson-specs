@@ -3,7 +3,7 @@
 -- either [servant-client](http://hackage.haskell.org/package/servant-client)
 -- or [servant-server](http://hackage.haskell.org/package/servant-server) there
 -- will be types included in your APIs that servant will convert to and from
--- JSON. (At least for most common APIs.) 'roundtripSpecs' allows you to
+-- JSON. (At least for most common APIs.) 'apiRoundtripSpecs' allows you to
 -- generically obtain a test-suite, that makes sure for those types, that they
 -- can be serialized to JSON and read back to Haskell successfully.
 --
@@ -41,7 +41,7 @@
 --
 -- >>> type Api = "post" :> ReqBody '[JSON] Foo :> Get '[JSON] Bar
 -- >>> let api = Proxy :: Proxy Api
--- >>> hspec $ roundtripSpecs api
+-- >>> hspec $ apiRoundtripSpecs api
 -- <BLANKLINE>
 -- JSON encoding of Bar
 --   allows to encode values with aeson and read them back
@@ -51,7 +51,7 @@
 -- Finished in ... seconds
 -- 2 examples, 0 failures
 module Servant.Aeson.RoundtripSpecs (
-  roundtripSpecs,
+  apiRoundtripSpecs,
   usedTypes,
 
   -- * re-exports
