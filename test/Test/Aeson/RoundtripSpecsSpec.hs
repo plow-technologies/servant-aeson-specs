@@ -11,7 +11,7 @@ import           Test.Hspec
 import           Test.Hspec.Core.Runner
 import           Test.QuickCheck
 
-import           Test.Aeson.RoundtripSpecs
+import           Test.Aeson.GenericSpecs
 import           Test.Utils
 
 spec :: Spec
