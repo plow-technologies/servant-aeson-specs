@@ -54,6 +54,7 @@
 module Servant.Aeson.GenericSpecs (
   apiRoundtripSpecs,
   apiGoldenSpecs,
+  apiSpecs,
   usedTypes,
 
   -- * re-exports
@@ -63,4 +64,3 @@ module Servant.Aeson.GenericSpecs (
 import           Data.Proxy
 
 import           Servant.Aeson.Internal
-

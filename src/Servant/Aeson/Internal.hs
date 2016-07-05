@@ -32,6 +32,9 @@ apiRoundtripSpecs = sequence_ . map roundtrip . mkRoundtripSpecs
 apiGoldenSpecs :: HasRoundtripSpecs api => Proxy api -> Spec
 apiGoldenSpecs proxy = sequence_ $ map golden $ mkRoundtripSpecs proxy
 
+apiSpecs :: (HasRoundtripSpecs api) => Proxy api -> Spec
+apiSpecs proxy = sequence_ $ map (\ ts -> roundtrip ts >> golden ts) $ mkRoundtripSpecs proxy
+
 -- | Allows to retrieve a list of all used types in a
 -- [servant](http://haskell-servant.readthedocs.org/) api as 'TypeRep's.
 usedTypes :: (HasRoundtripSpecs api) => Proxy api -> [TypeRep]
