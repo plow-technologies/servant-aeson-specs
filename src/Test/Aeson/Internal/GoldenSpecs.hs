@@ -23,6 +23,18 @@ import           Test.QuickCheck.Random
 
 import           Test.Aeson.Internal.RoundtripSpecs
 
+-- | Allows to obtain tests that will try to ensure that the JSON encoding
+-- didn't change unintentionally. To this end 'goldenSpecs' will
+--
+-- - write a file @golden.json/TYPENAME.json@ in the current directory
+--   containing a number of JSON-encoded sample values,
+-- - during subsequent tests it will encode the same sample values again and
+--   compare them with the saved golden encodings,
+-- - on failure it will create a file @golden.json/TYPENAME.faulty.json@ for
+--   easy manual inspection.
+--
+-- You can consider putting the golden files under revision control. That way
+-- it'll be obvious when JSON encodings change.
 goldenSpecs :: (Eq a, Show a, Typeable a, Arbitrary a, ToJSON a, FromJSON a) =>
   Proxy a -> Spec
 goldenSpecs proxy = goldenSpecsWithNote proxy Nothing

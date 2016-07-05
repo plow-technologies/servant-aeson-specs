@@ -3,9 +3,9 @@
 -- either [servant-client](http://hackage.haskell.org/package/servant-client)
 -- or [servant-server](http://hackage.haskell.org/package/servant-server) there
 -- will be types included in your APIs that servant will convert to and from
--- JSON. (At least for most common APIs.) 'apiRoundtripSpecs' allows you to
--- generically obtain a test-suite, that makes sure for those types, that they
--- can be serialized to JSON and read back to Haskell successfully.
+-- JSON. (At least for most common APIs.) This module allows you to
+-- generically obtain test-suites for JSON serialization and deserialization of
+-- those types.
 --
 -- Here's an example:
 --

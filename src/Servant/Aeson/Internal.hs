@@ -25,13 +25,18 @@ import           Test.Aeson.Internal.RoundtripSpecs
 -- | Allows to obtain roundtrip tests for JSON serialization for all types used
 -- in a [servant](http://haskell-servant.readthedocs.org/) api.
 --
--- See also 'Test.Aeson.RoundtripSpecs.roundtripSpecs'.
+-- See also 'Test.Aeson.GenericSpecs.roundtripSpecs'.
 apiRoundtripSpecs :: (HasGenericSpecs api) => Proxy api -> Spec
 apiRoundtripSpecs = sequence_ . map roundtrip . mkRoundtripSpecs
 
+-- | Allows to obtain golden tests for JSON serialization for all types used
+-- in a [servant](http://haskell-servant.readthedocs.org/) api.
+--
+-- See also 'Test.Aeson.GenericSpecs.goldenSpecs'.
 apiGoldenSpecs :: HasGenericSpecs api => Proxy api -> Spec
 apiGoldenSpecs proxy = sequence_ $ map golden $ mkRoundtripSpecs proxy
 
+-- | Combination of 'apiRoundtripSpecs' and 'apiGoldenSpecs'.
 apiSpecs :: (HasGenericSpecs api) => Proxy api -> Spec
 apiSpecs proxy = sequence_ $ map (\ ts -> roundtrip ts >> golden ts) $ mkRoundtripSpecs proxy
 
