@@ -50,8 +50,10 @@
 -- <BLANKLINE>
 -- Finished in ... seconds
 -- 2 examples, 0 failures
-module Servant.Aeson.RoundtripSpecs (
+
+module Servant.Aeson.GenericSpecs (
   apiRoundtripSpecs,
+  apiGoldenSpecs,
   usedTypes,
 
   -- * re-exports
@@ -60,4 +62,5 @@ module Servant.Aeson.RoundtripSpecs (
 
 import           Data.Proxy
 
-import           Servant.Aeson.RoundtripSpecs.Internal
+import           Servant.Aeson.Internal
+

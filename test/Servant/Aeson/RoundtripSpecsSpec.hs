@@ -13,7 +13,7 @@ import           Test.Hspec
 import           Test.Hspec.Core.Runner
 import           Test.Mockery.Directory
 
-import           Servant.Aeson.RoundtripSpecs
+import           Servant.Aeson.GenericSpecs
 import           Test.Aeson.RoundtripSpecsSpec
 import           Test.Utils
 

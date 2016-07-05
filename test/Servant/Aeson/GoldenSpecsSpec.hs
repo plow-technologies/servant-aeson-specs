@@ -10,7 +10,7 @@ import           Test.Hspec.Core.Runner
 import           Test.Mockery.Directory
 import           Test.Utils
 
-import           Servant.Aeson.GoldenSpecs
+import           Servant.Aeson.GenericSpecs
 
 spec :: Spec
 spec = do

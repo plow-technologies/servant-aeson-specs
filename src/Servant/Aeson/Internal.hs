@@ -7,7 +7,7 @@
 {-# LANGUAGE UndecidableInstances #-}
 
 -- | Internal module, use at your own risk.
-module Servant.Aeson.RoundtripSpecs.Internal where
+module Servant.Aeson.Internal where
 
 import           Data.Aeson
 import           Data.Function
@@ -28,6 +28,9 @@ import           Test.Aeson.Internal.RoundtripSpecs
 -- See also 'Test.Aeson.RoundtripSpecs.roundtripSpecs'.
 apiRoundtripSpecs :: (HasRoundtripSpecs api) => Proxy api -> Spec
 apiRoundtripSpecs = sequence_ . map roundtrip . mkRoundtripSpecs
+
+apiGoldenSpecs :: HasRoundtripSpecs api => Proxy api -> Spec
+apiGoldenSpecs proxy = sequence_ $ map golden $ mkRoundtripSpecs proxy
 
 -- | Allows to retrieve a list of all used types in a
 -- [servant](http://haskell-servant.readthedocs.org/) api as 'TypeRep's.
