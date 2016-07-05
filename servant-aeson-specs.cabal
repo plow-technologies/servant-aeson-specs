@@ -35,6 +35,7 @@ library
     , random
     , aeson-pretty
   exposed-modules:
+      Servant.Aeson.GoldenSpecs
       Servant.Aeson.RoundtripSpecs
       Servant.Aeson.RoundtripSpecs.Internal
       Test.Aeson.GoldenSpecs
@@ -71,10 +72,12 @@ test-suite spec
     , text
   other-modules:
       DoctestSpec
+      Servant.Aeson.GoldenSpecsSpec
       Servant.Aeson.RoundtripSpecsSpec
       Test.Aeson.GoldenSpecsSpec
       Test.Aeson.RoundtripSpecsSpec
       Test.Utils
+      Servant.Aeson.GoldenSpecs
       Servant.Aeson.RoundtripSpecs
       Servant.Aeson.RoundtripSpecs.Internal
       Test.Aeson.GoldenSpecs

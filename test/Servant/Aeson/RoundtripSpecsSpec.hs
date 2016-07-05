@@ -3,12 +3,15 @@
 
 module Servant.Aeson.RoundtripSpecsSpec where
 
+import           Data.List
 import           Data.Typeable
 import           Servant.API
+import           System.Directory
 import           System.IO
 import           System.IO.Temp
 import           Test.Hspec
 import           Test.Hspec.Core.Runner
+import           Test.Mockery.Directory
 
 import           Servant.Aeson.RoundtripSpecs
 import           Test.Aeson.RoundtripSpecsSpec
@@ -43,6 +46,11 @@ spec = do
       it "mentions that the type was wrapped in a list" $ do
         output <- hspecOutput $ roundtripSpecs getBoolList
         output `shouldContain` "(as element-type in [])"
+
+    it "does not write any files" $ do
+      inTempDirectory $ do
+        _ <- hspecSilently $ roundtripSpecs reqBodyFailApi
+        sort <$> getDirectoryContents "." `shouldReturn` [".", ".."]
 
   describe "usedTypes" $ do
     it "extracts types from ReqBody" $ do
