@@ -8,6 +8,7 @@ import           Data.Aeson
 import           Data.Aeson.Encode.Pretty
 import           Data.ByteString.Lazy as DBL (readFile, writeFile)
 import           Data.List
+import           Data.Proxy
 import           Data.String.Conversions
 import           Data.Text (Text)
 import           Prelude hiding (readFile, writeFile, putStrLn)
@@ -16,7 +17,7 @@ import           Test.Hspec
 import           Test.Mockery.Directory
 import           Test.QuickCheck.Instances ()
 
-import           Test.Aeson.GoldenSpecs
+import           Test.Aeson.GoldenSpecs.Internal
 import           Test.Utils
 
 textP :: Proxy Text
