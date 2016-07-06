@@ -52,6 +52,11 @@ spec = do
         usedTypes (Proxy :: Proxy (Get '[JSON] (Maybe Bool)))
           `shouldBe` [boolRep]
 
+    context "when it finds ()" $ do
+      it "does not return anything" $ do
+        usedTypes (Proxy :: Proxy (Get '[JSON] ()))
+          `shouldBe` []
+
     it "does not write any files" $ do
       inTempDirectory $ do
         _ <- hspecSilently $ apiRoundtripSpecs reqBodyFailApi

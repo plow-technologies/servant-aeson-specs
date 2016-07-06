@@ -134,3 +134,9 @@ instance {-# OVERLAPPING #-}
     where
       proxy = Proxy :: Proxy a
       note = "(as element-type in Maybe)"
+
+-- We trust aeson to be correct for ().
+instance {-# OVERLAPPING #-}
+  MkTypeSpecs () where
+
+  mkTypeSpecs Proxy = []
