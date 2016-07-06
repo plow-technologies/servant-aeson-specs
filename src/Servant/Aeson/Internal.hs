@@ -103,9 +103,10 @@ instance (Typeable a, Eq a, Show a, Arbitrary a, ToJSON a, FromJSON a) => MkType
       golden = goldenSpecs proxy
     }
 
--- This will only test json serialization of the element type. As we trust aeson
--- to do the right thing for lists, we don't need to test that. (This speeds up
--- test suites immensely.)
+-- The following instances will only test json serialization of element types.
+-- As we trust aeson to do the right thing for standard container types, we
+-- don't need to test that. (This speeds up test suites immensely.)
+
 instance {-# OVERLAPPING #-}
   (Eq a, Show a, Typeable a, Arbitrary a, ToJSON a, FromJSON a) =>
   MkTypeSpecs [a] where
@@ -119,3 +120,17 @@ instance {-# OVERLAPPING #-}
     where
       proxy = Proxy :: Proxy a
       note = "(as element-type in [])"
+
+instance {-# OVERLAPPING #-}
+  (Eq a, Show a, Typeable a, Arbitrary a, ToJSON a, FromJSON a) =>
+  MkTypeSpecs (Maybe a) where
+
+  mkTypeSpecs Proxy = pure $
+    TypeSpec {
+      typ = typeRep proxy,
+      roundtrip = genericAesonRoundtripWithNote proxy (Just note),
+      golden = goldenSpecsWithNote proxy (Just note)
+    }
+    where
+      proxy = Proxy :: Proxy a
+      note = "(as element-type in Maybe)"

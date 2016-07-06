@@ -41,11 +41,16 @@ spec = do
 
     context "when it finds a list of something" $ do
       it "returns only the element type" $ do
-        usedTypes getBoolList `shouldBe` [boolRep]
+        usedTypes getListOfBool `shouldBe` [boolRep]
 
       it "mentions that the type was wrapped in a list" $ do
-        output <- hspecOutput $ apiRoundtripSpecs getBoolList
+        output <- hspecOutput $ apiRoundtripSpecs getListOfBool
         output `shouldContain` "(as element-type in [])"
+
+    context "when it finds a Maybe" $ do
+      it "returns only the element type" $ do
+        usedTypes (Proxy :: Proxy (Get '[JSON] (Maybe Bool)))
+          `shouldBe` [boolRep]
 
     it "does not write any files" $ do
       inTempDirectory $ do
@@ -80,8 +85,8 @@ reqBodyFailApi = Proxy
 getFailApi :: Proxy (Get '[JSON] FaultyRoundtrip)
 getFailApi = Proxy
 
-getBoolList :: Proxy (Get '[JSON] [Bool])
-getBoolList = Proxy
+getListOfBool :: Proxy (Get '[JSON] [Bool])
+getListOfBool = Proxy
 
 doubleTypesApi :: Proxy (ReqBody '[JSON] Bool :> Get '[JSON] Bool)
 doubleTypesApi = Proxy
