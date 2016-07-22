@@ -10,7 +10,7 @@ category:       Web
 homepage:       https://github.com/plow-technologies/servant-aeson-specs#readme
 bug-reports:    https://github.com/plow-technologies/servant-aeson-specs/issues
 maintainer:     soenkehahn@gmail.com
-license:        BSD3
+license:        MIT
 license-file:   LICENSE
 build-type:     Simple
 cabal-version:  >= 1.10
