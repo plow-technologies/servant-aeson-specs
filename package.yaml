@@ -4,7 +4,7 @@ synopsis: generic tests for aeson serialization in servant
 description: tests for aeson serialization in servant
 category: Web
 maintainer: soenkehahn@gmail.com
-license: BSD3
+license: MIT
 license-file: LICENSE
 
 github: plow-technologies/servant-aeson-specs
