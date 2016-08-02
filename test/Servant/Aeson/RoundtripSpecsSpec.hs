@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
 
@@ -105,9 +106,13 @@ boolRep :: TypeRep
 boolRep = typeRep (Proxy :: Proxy Bool)
 
 matrixParamTest :: Spec
+#if !MIN_VERSION_servant(0, 5, 0)
 matrixParamTest = do
   it "supports MatrixParam" $ do
     usedTypes matrixParamApi `shouldBe` [boolRep]
 
 matrixParamApi :: Proxy (MatrixParam "foo" String :> Get '[JSON] Bool)
 matrixParamApi = Proxy
+#else
+matrixParamTest = return ()
+#endif

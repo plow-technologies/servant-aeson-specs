@@ -15,7 +15,7 @@ dependencies:
   - bytestring
   - hspec
   - QuickCheck
-  - servant == 0.4.*
+  - servant == 0.4.* || == 0.5.*
   - directory
   - filepath
   - random
