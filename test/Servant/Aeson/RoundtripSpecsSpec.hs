@@ -85,6 +85,9 @@ spec = do
     it "returns types sorted by name" $ do
       usedTypes reqBodyFailApi `shouldBe` [boolRep, faultyRoundtripRep]
 
+    it "works for Post" $ do
+      usedTypes postApi `shouldBe` [boolRep]
+
     matrixParamTest
 
 reqBodyFailApi :: Proxy (ReqBody '[JSON] FaultyRoundtrip :> Get '[JSON] Bool)
@@ -92,6 +95,9 @@ reqBodyFailApi = Proxy
 
 getFailApi :: Proxy (Get '[JSON] FaultyRoundtrip)
 getFailApi = Proxy
+
+postApi :: Proxy (Post '[JSON] Bool)
+postApi = Proxy
 
 getListOfBool :: Proxy (Get '[JSON] [Bool])
 getListOfBool = Proxy

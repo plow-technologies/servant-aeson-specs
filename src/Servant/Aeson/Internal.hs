@@ -59,6 +59,15 @@ instance (HasGenericSpecs a, HasGenericSpecs b) => HasGenericSpecs (a :<|> b) wh
     collectRoundtripSpecs (Proxy :: Proxy a) ++
     collectRoundtripSpecs (Proxy :: Proxy b)
 
+-- * http methods
+
+#if MIN_VERSION_servant(0, 5, 0)
+instance (MkTypeSpecs response) =>
+  HasGenericSpecs (Verb (method :: StdMethod) returnStatus contentTypes response) where
+
+  collectRoundtripSpecs Proxy = do
+    mkTypeSpecs (Proxy :: Proxy response)
+#else
 instance (MkTypeSpecs response) =>
   HasGenericSpecs (Get contentTypes response) where
 
@@ -69,6 +78,9 @@ instance (MkTypeSpecs response) =>
   HasGenericSpecs (Post contentTypes response) where
 
   collectRoundtripSpecs Proxy = mkTypeSpecs (Proxy :: Proxy response)
+#endif
+
+-- * combinators
 
 instance (MkTypeSpecs body, HasGenericSpecs api) =>
   HasGenericSpecs (ReqBody contentTypes body :> api) where
