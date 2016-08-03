@@ -90,6 +90,8 @@ spec = do
 
     matrixParamTest
 
+    noContentTest
+
 reqBodyFailApi :: Proxy (ReqBody '[JSON] FaultyRoundtrip :> Get '[JSON] Bool)
 reqBodyFailApi = Proxy
 
@@ -121,4 +123,16 @@ matrixParamApi :: Proxy (MatrixParam "foo" String :> Get '[JSON] Bool)
 matrixParamApi = Proxy
 #else
 matrixParamTest = return ()
+#endif
+
+noContentTest :: Spec
+#if MIN_VERSION_servant(0, 5, 0)
+noContentTest = do
+  it "works for Apis containing NoContent" $ do
+    usedTypes noContentApi `shouldBe` [boolRep]
+
+noContentApi :: Proxy (ReqBody '[JSON] Bool :> GetNoContent '[JSON] NoContent)
+noContentApi = Proxy
+#else
+noContentTest = return ()
 #endif

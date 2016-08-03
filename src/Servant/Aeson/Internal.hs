@@ -62,11 +62,17 @@ instance (HasGenericSpecs a, HasGenericSpecs b) => HasGenericSpecs (a :<|> b) wh
 -- * http methods
 
 #if MIN_VERSION_servant(0, 5, 0)
-instance (MkTypeSpecs response) =>
+instance {-# OVERLAPPABLE #-}
+  (MkTypeSpecs response) =>
   HasGenericSpecs (Verb (method :: StdMethod) returnStatus contentTypes response) where
 
   collectRoundtripSpecs Proxy = do
     mkTypeSpecs (Proxy :: Proxy response)
+
+instance {-# OVERLAPPING #-}
+  HasGenericSpecs (Verb (method :: StdMethod) returnStatus contentTypes NoContent) where
+
+  collectRoundtripSpecs Proxy = []
 #else
 instance (MkTypeSpecs response) =>
   HasGenericSpecs (Get contentTypes response) where
