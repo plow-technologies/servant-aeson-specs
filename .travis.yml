@@ -8,6 +8,7 @@ addons:
 env:
   - STACK_YAML=stack-servant-0.4.yaml
   - STACK_YAML=stack-servant-0.5.yaml
+  - STACK_YAML=stack-servant-0.6.yaml
   - STACK_YAML=stack.yaml
 
 install:
