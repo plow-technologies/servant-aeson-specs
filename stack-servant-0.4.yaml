@@ -1,3 +1,4 @@
+work-dir: .stack-work-servant-0.4
 resolver: lts-6.4
 packages:
   - '.'
