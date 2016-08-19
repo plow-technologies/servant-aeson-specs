@@ -29,7 +29,7 @@ library
     , bytestring
     , hspec
     , QuickCheck
-    , servant == 0.4.* || == 0.5.* || == 0.6.* || == 0.7.*
+    , servant == 0.4.* || == 0.5.* || == 0.6.* || == 0.7.* || == 0.8.*
     , directory
     , filepath
     , random
@@ -55,7 +55,7 @@ test-suite spec
     , bytestring
     , hspec
     , QuickCheck
-    , servant == 0.4.* || == 0.5.* || == 0.6.* || == 0.7.*
+    , servant == 0.4.* || == 0.5.* || == 0.6.* || == 0.7.* || == 0.8.*
     , directory
     , filepath
     , random
