@@ -22,6 +22,7 @@ import           Test.QuickCheck
 
 import           Test.Aeson.Internal.GoldenSpecs
 import           Test.Aeson.Internal.RoundtripSpecs
+import           Test.Aeson.GenericSpecs
 
 -- | Allows to obtain roundtrip tests for JSON serialization for all types used
 -- in a [servant](http://haskell-servant.readthedocs.org/) api.
@@ -121,7 +122,7 @@ instance (Typeable a, Eq a, Show a, Arbitrary a, ToJSON a, FromJSON a) => MkType
     TypeSpec {
       typ = typeRep proxy,
       roundtrip = roundtripSpecs proxy,
-      golden = goldenSpecs proxy
+      golden = goldenSpecs defaultSettings proxy
     }
 
 -- The following instances will only test json serialization of element types.
@@ -136,7 +137,7 @@ instance {-# OVERLAPPING #-}
     TypeSpec {
       typ = typeRep proxy,
       roundtrip = genericAesonRoundtripWithNote proxy (Just note),
-      golden = goldenSpecsWithNote proxy (Just note)
+      golden = goldenSpecsWithNote defaultSettings proxy (Just note)
     }
     where
       proxy = Proxy :: Proxy a
@@ -150,7 +151,7 @@ instance {-# OVERLAPPING #-}
     TypeSpec {
       typ = typeRep proxy,
       roundtrip = genericAesonRoundtripWithNote proxy (Just note),
-      golden = goldenSpecsWithNote proxy (Just note)
+      golden = goldenSpecsWithNote defaultSettings proxy (Just note)
     }
     where
       proxy = Proxy :: Proxy a

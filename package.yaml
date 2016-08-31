@@ -20,6 +20,8 @@ dependencies:
   - filepath
   - random
   - aeson-pretty
+  - quickcheck-arbitrary-adt
+  - hspec-golden-aeson
 
 ghc-options:
   -Wall -fno-warn-name-shadowing
@@ -39,6 +41,8 @@ tests:
       - quickcheck-instances
       - string-conversions
       - text
+      - quickcheck-arbitrary-adt
+      - hspec-golden-aeson
 
 library:
   source-dirs:

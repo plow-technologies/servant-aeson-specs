@@ -18,11 +18,11 @@ spec = do
     it "writes files for used types" $ do
       inTempDirectory $ do
         _ <- hspecSilently $ apiGoldenSpecs (Proxy :: Proxy (Get '[JSON] Bool))
-        doesFileExist "golden.json/Bool.json" `shouldReturn` True
+        doesFileExist "golden/Bool.json" `shouldReturn` True
 
     it "raises errors for non-matching golden files" $ do
       inTempDirectory $ do
-        createDirectoryIfMissing True "golden.json"
-        writeFile "golden.json/Bool.json" "foo"
+        createDirectoryIfMissing True "golden"
+        writeFile "golden/Bool.json" "foo"
         apiGoldenSpecs (Proxy :: Proxy (Get '[JSON] Bool)) `shouldTestAs`
           Summary 1 1
