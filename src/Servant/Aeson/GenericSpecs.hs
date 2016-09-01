@@ -64,7 +64,9 @@ Finished in ... seconds
 module Servant.Aeson.GenericSpecs (
   apiRoundtripSpecs,
   apiGoldenSpecs,
+  apiGoldenSpecsWithSettings,
   apiSpecs,
+  apiSpecsWithSettings,
   usedTypes,
 
   -- * re-exports

@@ -47,12 +47,20 @@ apiRoundtripSpecs = sequence_ . map roundtrip . mkRoundtripSpecs defaultSettings
 -- in a [servant](http://haskell-servant.readthedocs.org/) api.
 --
 -- See also 'Test.Aeson.GenericSpecs.goldenSpecs'.
-apiGoldenSpecs :: HasGenericSpecs api => Settings -> Proxy api -> Spec
-apiGoldenSpecs settings proxy = sequence_ $ map golden $ mkRoundtripSpecs settings proxy
+apiGoldenSpecs :: HasGenericSpecs api => Proxy api -> Spec
+apiGoldenSpecs proxy = apiGoldenSpecsWithSettings defaultSettings proxy
+
+-- | Same as 'apiGoldenSpecs', but allows custom settings.
+apiGoldenSpecsWithSettings :: HasGenericSpecs api => Settings -> Proxy api -> Spec
+apiGoldenSpecsWithSettings settings proxy = sequence_ $ map golden $ mkRoundtripSpecs settings proxy
 
 -- | Combination of 'apiRoundtripSpecs' and 'apiGoldenSpecs'.
-apiSpecs :: (HasGenericSpecs api) => Settings -> Proxy api -> Spec
-apiSpecs settings proxy = sequence_ $ map (\ ts -> roundtrip ts >> golden ts) $ mkRoundtripSpecs settings proxy
+apiSpecs :: (HasGenericSpecs api) => Proxy api -> Spec
+apiSpecs proxy = apiSpecsWithSettings defaultSettings proxy
+
+-- | Same as 'apiSpecs', but allows custom settings.
+apiSpecsWithSettings :: (HasGenericSpecs api) => Settings -> Proxy api -> Spec
+apiSpecsWithSettings settings proxy = sequence_ $ map (\ ts -> roundtrip ts >> golden ts) $ mkRoundtripSpecs settings proxy
 
 -- | Allows to retrieve a list of all used types in a
 -- [servant](http://haskell-servant.readthedocs.org/) api as 'TypeRep's.
