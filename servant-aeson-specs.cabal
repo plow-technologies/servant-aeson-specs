@@ -34,8 +34,8 @@ library
     , filepath
     , random
     , aeson-pretty
-    , quickcheck-arbitrary-adt
-    , hspec-golden-aeson
+    , quickcheck-arbitrary-adt == 0.2.0.0
+    , hspec-golden-aeson == 0.2.0.1
   exposed-modules:
       Servant.Aeson.GenericSpecs
       Servant.Aeson.Internal
@@ -59,8 +59,8 @@ test-suite spec
     , filepath
     , random
     , aeson-pretty
-    , quickcheck-arbitrary-adt
-    , hspec-golden-aeson
+    , quickcheck-arbitrary-adt == 0.2.0.0
+    , hspec-golden-aeson == 0.2.0.1
     , hspec-core
     , temporary
     , doctest
@@ -69,13 +69,12 @@ test-suite spec
     , quickcheck-instances
     , string-conversions
     , text
-    , quickcheck-arbitrary-adt
-    , hspec-golden-aeson
+    , quickcheck-arbitrary-adt == 0.2.0.0
+    , hspec-golden-aeson == 0.2.0.1
   other-modules:
       DoctestSpec
       Servant.Aeson.GoldenSpecsSpec
       Servant.Aeson.RoundtripSpecsSpec
-      Test.Aeson.RoundtripSpecsSpec
       Test.Utils
       Servant.Aeson.GenericSpecs
       Servant.Aeson.Internal

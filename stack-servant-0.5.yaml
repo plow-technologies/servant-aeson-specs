@@ -2,9 +2,7 @@ work-dir: .stack-work-servant-0.5
 resolver: lts-6.4
 packages:
   - '.'
-  - "../hspec-golden-aeson"
-
 extra-deps:
   - servant-0.5
   - quickcheck-arbitrary-adt-0.2.0.0
-#  - hspec-golden-aeson-0.2.0.0
+  - hspec-golden-aeson-0.2.0.1
