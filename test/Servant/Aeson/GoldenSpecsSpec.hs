@@ -3,16 +3,13 @@
 module Servant.Aeson.GoldenSpecsSpec where
 
 import           Data.Proxy
+import           Servant.Aeson.GenericSpecs
 import           Servant.API
 import           System.Directory
 import           Test.Hspec
 import           Test.Hspec.Core.Runner
 import           Test.Mockery.Directory
 import           Test.Utils
-
-import           Servant.Aeson.GenericSpecs
-
-import           Test.Aeson.GenericSpecs
 
 
 spec :: Spec

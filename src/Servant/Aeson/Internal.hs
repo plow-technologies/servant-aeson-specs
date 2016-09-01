@@ -1,3 +1,14 @@
+{-|
+Module      : Servant.Aeson.Internal
+Description : Servant hspec test functions
+Copyright   : (c) Plow Technologies, 2016
+License     : MIT
+Maintainer  : soenkehahn@gmail.com, mchaver@gmail.com
+Stability   : Alpha
+
+Internal module, use at your own risk.
+-}
+
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE FlexibleContexts #-}
@@ -7,7 +18,6 @@
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 
--- | Internal module, use at your own risk.
 module Servant.Aeson.Internal where
 
 import           Data.Aeson
@@ -25,7 +35,9 @@ import           Test.Aeson.Internal.RoundtripSpecs
 import           Test.Aeson.GenericSpecs
 
 -- | Allows to obtain roundtrip tests for JSON serialization for all types used
--- in a [servant](http://haskell-servant.readthedocs.org/) api.
+-- in a [servant](http://haskell-servant.readthedocs.org/) api. It uses settings
+-- are not used in 'roundtripSpecs'. There is no need to let the user pass
+-- cusomt settings. It automatically uses 'defaultSettings'.
 --
 -- See also 'Test.Aeson.GenericSpecs.roundtripSpecs'.
 apiRoundtripSpecs :: (HasGenericSpecs api) => Proxy api -> Spec
@@ -73,18 +85,18 @@ instance {-# OVERLAPPABLE #-}
 instance {-# OVERLAPPING #-}
   HasGenericSpecs (Verb (method :: StdMethod) returnStatus contentTypes NoContent) where
 
-  collectRoundtripSpecs settings Proxy = []
+  collectRoundtripSpecs _ Proxy = []
 #else
 instance (MkTypeSpecs response) =>
   HasGenericSpecs (Get contentTypes response) where
 
-  collectRoundtripSpecs Proxy = do
-    mkTypeSpecs (Proxy :: Proxy response)
+  collectRoundtripSpecs settings Proxy = do
+    mkTypeSpecs settings (Proxy :: Proxy response)
 
 instance (MkTypeSpecs response) =>
   HasGenericSpecs (Post contentTypes response) where
 
-  collectRoundtripSpecs Proxy = mkTypeSpecs (Proxy :: Proxy response)
+  collectRoundtripSpecs settings Proxy = mkTypeSpecs settings (Proxy :: Proxy response)
 #endif
 
 -- * combinators
@@ -101,7 +113,7 @@ instance HasGenericSpecs api => HasGenericSpecs ((path :: Symbol) :> api) where
 
 #if !MIN_VERSION_servant(0, 5, 0)
 instance HasGenericSpecs api => HasGenericSpecs (MatrixParam name a :> api) where
-  collectRoundtripSpecs Proxy = collectRoundtripSpecs (Proxy :: Proxy api)
+  collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 #endif
 
 data TypeSpec
