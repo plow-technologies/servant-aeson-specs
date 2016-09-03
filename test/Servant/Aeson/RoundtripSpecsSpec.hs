@@ -91,6 +91,9 @@ spec = do
     it "ignores response headers" $ do
       usedTypes responseHeadersApi `shouldBe` [boolRep]
 
+    it "traverses Capture" $ do
+      usedTypes captureApi `shouldBe` [boolRep]
+
     matrixParamTest
 
     noContentTest
@@ -120,6 +123,9 @@ boolRep = typeRep (Proxy :: Proxy Bool)
 
 responseHeadersApi :: Proxy (Post '[JSON] (Headers '[Header "Cookie" Int] Bool))
 responseHeadersApi= Proxy
+
+captureApi :: Proxy (Capture "number" Int :> Post '[JSON] Bool)
+captureApi = Proxy
 
 matrixParamTest :: Spec
 #if !MIN_VERSION_servant(0, 5, 0)
