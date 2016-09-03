@@ -88,6 +88,9 @@ spec = do
     it "works for Post" $ do
       usedTypes postApi `shouldBe` [boolRep]
 
+    it "ignores response headers" $ do
+      usedTypes responseHeadersApi `shouldBe` [boolRep]
+
     matrixParamTest
 
     noContentTest
@@ -112,6 +115,9 @@ faultyRoundtripRep = typeRep (Proxy :: Proxy FaultyRoundtrip)
 
 boolRep :: TypeRep
 boolRep = typeRep (Proxy :: Proxy Bool)
+
+responseHeadersApi :: Proxy (Post '[JSON] (Headers '[Header "Cookie" Int] Bool))
+responseHeadersApi= Proxy
 
 matrixParamTest :: Spec
 #if !MIN_VERSION_servant(0, 5, 0)

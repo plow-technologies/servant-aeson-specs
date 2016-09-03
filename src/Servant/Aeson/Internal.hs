@@ -73,15 +73,34 @@ instance {-# OVERLAPPING #-}
   HasGenericSpecs (Verb (method :: StdMethod) returnStatus contentTypes NoContent) where
 
   collectRoundtripSpecs Proxy = []
-#else
+
 instance (MkTypeSpecs response) =>
+  HasGenericSpecs (Verb (method :: StdMethod) returnStatus contentTypes (Headers hs response)) where
+  collectRoundtripSpecs Proxy = mkTypeSpecs (Proxy :: Proxy response)
+
+#else
+instance {-# OVERLAPPABLE #-}
+  (MkTypeSpecs response) =>
   HasGenericSpecs (Get contentTypes response) where
 
   collectRoundtripSpecs Proxy = do
     mkTypeSpecs (Proxy :: Proxy response)
 
-instance (MkTypeSpecs response) =>
+instance {-# OVERLAPPABLE #-}
+  (MkTypeSpecs response) =>
   HasGenericSpecs (Post contentTypes response) where
+
+  collectRoundtripSpecs Proxy = mkTypeSpecs (Proxy :: Proxy response)
+
+instance {-# OVERLAPPING #-}
+  (MkTypeSpecs response) =>
+  HasGenericSpecs (Get contentTypes (Headers hs response)) where
+
+  collectRoundtripSpecs Proxy = mkTypeSpecs (Proxy :: Proxy response)
+
+instance {-# OVERLAPPING #-}
+  (MkTypeSpecs response) =>
+  HasGenericSpecs (Post contentTypes (Headers hs response)) where
 
   collectRoundtripSpecs Proxy = mkTypeSpecs (Proxy :: Proxy response)
 #endif
