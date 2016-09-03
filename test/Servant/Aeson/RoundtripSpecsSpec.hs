@@ -94,6 +94,9 @@ spec = do
     it "traverses Capture" $ do
       usedTypes captureApi `shouldBe` [boolRep]
 
+    it "traverses query params" $ do
+      usedTypes queryParamsApi `shouldBe` [boolRep]
+
     matrixParamTest
 
     noContentTest
@@ -126,6 +129,9 @@ responseHeadersApi= Proxy
 
 captureApi :: Proxy (Capture "number" Int :> Post '[JSON] Bool)
 captureApi = Proxy
+
+queryParamsApi :: Proxy (QueryParam "foo" Int :> Post '[JSON] Bool)
+queryParamsApi = Proxy
 
 matrixParamTest :: Spec
 #if !MIN_VERSION_servant(0, 5, 0)

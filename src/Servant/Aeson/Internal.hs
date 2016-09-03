@@ -120,6 +120,9 @@ instance HasGenericSpecs api => HasGenericSpecs ((path :: Symbol) :> api) where
 instance HasGenericSpecs api  => HasGenericSpecs (Capture (sym :: Symbol) x :> api) where
   collectRoundtripSpecs Proxy = collectRoundtripSpecs (Proxy :: Proxy api)
 
+instance HasGenericSpecs api  => HasGenericSpecs (QueryParam (sym :: Symbol) x :> api) where
+  collectRoundtripSpecs Proxy = collectRoundtripSpecs (Proxy :: Proxy api)
+
 #if MIN_VERSION_servant(0, 5, 0)
 instance HasGenericSpecs api => HasGenericSpecs (AuthProtect (sym :: Symbol) :> api) where
   collectRoundtripSpecs Proxy = collectRoundtripSpecs (Proxy :: Proxy api)
