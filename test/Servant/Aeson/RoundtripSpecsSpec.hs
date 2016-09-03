@@ -94,6 +94,9 @@ spec = do
     it "traverses Capture" $ do
       usedTypes captureApi `shouldBe` [boolRep]
 
+    it "traverses request headers" $ do
+      usedTypes requestHeadersApi `shouldBe` [boolRep]
+
     it "traverses query params" $ do
       usedTypes queryParamsApi `shouldBe` [boolRep]
 
@@ -129,6 +132,9 @@ responseHeadersApi= Proxy
 
 captureApi :: Proxy (Capture "number" Int :> Post '[JSON] Bool)
 captureApi = Proxy
+
+requestHeadersApi  :: Proxy (Header "Cookie" Int :> Post '[JSON] Bool)
+requestHeadersApi = Proxy
 
 queryParamsApi :: Proxy (QueryParam "foo" Int :> Post '[JSON] Bool)
 queryParamsApi = Proxy
