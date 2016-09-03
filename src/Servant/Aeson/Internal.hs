@@ -117,7 +117,10 @@ instance (MkTypeSpecs body, HasGenericSpecs api) =>
 instance HasGenericSpecs api => HasGenericSpecs ((path :: Symbol) :> api) where
   collectRoundtripSpecs Proxy = collectRoundtripSpecs (Proxy :: Proxy api)
 
-#if !MIN_VERSION_servant(0, 5, 0)
+#if MIN_VERSION_servant(0, 5, 0)
+instance HasGenericSpecs api => HasGenericSpecs (AuthProtect (sym :: Symbol) :> api) where
+  collectRoundtripSpecs Proxy = collectRoundtripSpecs (Proxy :: Proxy api)
+#else
 instance HasGenericSpecs api => HasGenericSpecs (MatrixParam name a :> api) where
   collectRoundtripSpecs Proxy = collectRoundtripSpecs (Proxy :: Proxy api)
 #endif

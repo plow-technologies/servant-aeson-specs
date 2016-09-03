@@ -95,6 +95,8 @@ spec = do
 
     noContentTest
 
+    authProtectTest
+
 reqBodyFailApi :: Proxy (ReqBody '[JSON] FaultyRoundtrip :> Get '[JSON] Bool)
 reqBodyFailApi = Proxy
 
@@ -141,4 +143,16 @@ noContentApi :: Proxy (ReqBody '[JSON] Bool :> GetNoContent '[JSON] NoContent)
 noContentApi = Proxy
 #else
 noContentTest = return ()
+#endif
+
+authProtectTest :: Spec
+#if MIN_VERSION_servant(0, 5, 0)
+authProtectTest =  do
+  it "traverses AuthProtect" $ do
+    usedTypes authProtectApi `shouldBe` [boolRep]
+
+authProtectApi :: Proxy (AuthProtect "scheme" :> Post '[JSON] Bool)
+authProtectApi = Proxy
+#else
+authProtectTest = return ()
 #endif
