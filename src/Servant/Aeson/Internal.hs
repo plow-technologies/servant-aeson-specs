@@ -77,7 +77,7 @@ mkRoundtripSpecs settings = normalize . collectRoundtripSpecs settings
 class HasGenericSpecs api where
   collectRoundtripSpecs :: Settings -> Proxy api -> [TypeSpec]
 
--- | instance for '(:<|>)' combinator
+-- | Match ':<|>'.
 instance (HasGenericSpecs a, HasGenericSpecs b) => HasGenericSpecs (a :<|> b) where
   collectRoundtripSpecs settings Proxy =
     collectRoundtripSpecs settings (Proxy :: Proxy a) ++
@@ -118,7 +118,7 @@ instance (MkTypeSpecs response) =>
 
 -- * combinators
 
--- | Match 'ReqBody' and '(:>)'.
+-- | Match 'ReqBody' and ':>'.
 instance (MkTypeSpecs body, HasGenericSpecs api) =>
   HasGenericSpecs (ReqBody contentTypes body :> api) where
 
@@ -126,12 +126,12 @@ instance (MkTypeSpecs body, HasGenericSpecs api) =>
     mkTypeSpecs settings (Proxy :: Proxy body) ++
     collectRoundtripSpecs settings (Proxy :: Proxy api)
 
--- | Match 'Symbol' and '(:>)'.
+-- | Match 'Symbol' and ':>'.
 instance HasGenericSpecs api => HasGenericSpecs ((path :: Symbol) :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 
 #if !MIN_VERSION_servant(0, 5, 0)
--- | Servant < 0.5.0, match 'MatrixParam' and '(:>)'.
+-- | Servant < 0.5.0, match 'MatrixParam' and ':>'.
 instance HasGenericSpecs api => HasGenericSpecs (MatrixParam name a :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 #endif
