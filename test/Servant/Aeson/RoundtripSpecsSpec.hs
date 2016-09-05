@@ -1,11 +1,15 @@
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeOperators #-}
 
 module Servant.Aeson.RoundtripSpecsSpec where
 
+import           Data.Aeson
 import           Data.List
 import           Data.Typeable
+import           GHC.Generics
 import           Servant.API
 import           System.Directory
 import           System.IO
@@ -13,9 +17,8 @@ import           System.IO.Temp
 import           Test.Hspec
 import           Test.Hspec.Core.Runner
 import           Test.Mockery.Directory
-
+import           Test.QuickCheck
 import           Servant.Aeson.GenericSpecs
-import           Test.Aeson.RoundtripSpecsSpec
 import           Test.Utils
 
 -- ignores the Summary
@@ -136,3 +139,23 @@ noContentApi = Proxy
 #else
 noContentTest = return ()
 #endif
+
+
+-- | Type where roundtrips don't work.
+data FaultyRoundtrip
+  = FaultyRoundtrip {
+    faultyRoundtripFoo :: String,
+    faultyRoundtripBar :: Int
+  }
+  deriving (Show, Eq, Generic)
+
+instance ToJSON FaultyRoundtrip where
+  toJSON x = object $
+    "foo" .= faultyRoundtripFoo x :
+    "bar" .= faultyRoundtripBar x :
+    []
+
+instance FromJSON FaultyRoundtrip
+
+instance Arbitrary FaultyRoundtrip where
+  arbitrary = FaultyRoundtrip <$> arbitrary <*> arbitrary

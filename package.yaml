@@ -1,11 +1,14 @@
 name: servant-aeson-specs
-version: "0.4.1"
+version: "0.4.2.0"
 synopsis: generic tests for aeson serialization in servant
 description: tests for aeson serialization in servant
 category: Web
-maintainer: soenkehahn@gmail.com
+copyright: Plow Technologies
+maintainer: soenkehahn@gmail.com, mchaver@gmail.com
+author: Sönke Hahn, James M.C. Haver II
 license: MIT
 license-file: LICENSE
+stability: alpha
 
 github: plow-technologies/servant-aeson-specs
 
@@ -20,6 +23,8 @@ dependencies:
   - filepath
   - random
   - aeson-pretty
+  - quickcheck-arbitrary-adt == 0.2.0.0
+  - hspec-golden-aeson == 0.2.0.1
 
 ghc-options:
   -Wall -fno-warn-name-shadowing
@@ -39,6 +44,8 @@ tests:
       - quickcheck-instances
       - string-conversions
       - text
+      - quickcheck-arbitrary-adt == 0.2.0.0
+      - hspec-golden-aeson == 0.2.0.1
 
 library:
   source-dirs:
