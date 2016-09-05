@@ -67,14 +67,17 @@ apiSpecsWithSettings settings proxy = sequence_ $ map (\ ts -> roundtrip ts >> g
 usedTypes :: (HasGenericSpecs api) => Proxy api -> [TypeRep]
 usedTypes = map typ . mkRoundtripSpecs defaultSettings
 
+-- | Make roundtrip test for all the routes in an API, remove duplicates.
 mkRoundtripSpecs :: (HasGenericSpecs api) => Settings -> Proxy api -> [TypeSpec]
 mkRoundtripSpecs settings = normalize . collectRoundtripSpecs settings
   where
     normalize = nubBy ((==) `on` typ) . sortBy (compare `on` (show . typ))
 
+-- | Allows you to iterate over the routes of a Servant API
 class HasGenericSpecs api where
   collectRoundtripSpecs :: Settings -> Proxy api -> [TypeSpec]
 
+-- | instance for '(:<|>)' combinator
 instance (HasGenericSpecs a, HasGenericSpecs b) => HasGenericSpecs (a :<|> b) where
   collectRoundtripSpecs settings Proxy =
     collectRoundtripSpecs settings (Proxy :: Proxy a) ++
@@ -83,6 +86,8 @@ instance (HasGenericSpecs a, HasGenericSpecs b) => HasGenericSpecs (a :<|> b) wh
 -- * http methods
 
 #if MIN_VERSION_servant(0, 5, 0)
+-- | Servant >= 0.5.0, pattern match on 'StdMethod' and response with content,
+-- make 'TypeSpec's.
 instance {-# OVERLAPPABLE #-}
   (MkTypeSpecs response) =>
   HasGenericSpecs (Verb (method :: StdMethod) returnStatus contentTypes response) where
@@ -90,17 +95,21 @@ instance {-# OVERLAPPABLE #-}
   collectRoundtripSpecs settings Proxy = do
     mkTypeSpecs settings (Proxy :: Proxy response)
 
+-- | Servant >= 0.5.0, pattern match on 'StdMethod' and 'NoContent', make
+-- 'TypeSpec's.
 instance {-# OVERLAPPING #-}
   HasGenericSpecs (Verb (method :: StdMethod) returnStatus contentTypes NoContent) where
 
   collectRoundtripSpecs _ Proxy = []
 #else
+-- | Servant < 0.5.0, match 'Get', make 'TypeSpec's.
 instance (MkTypeSpecs response) =>
   HasGenericSpecs (Get contentTypes response) where
 
   collectRoundtripSpecs settings Proxy = do
     mkTypeSpecs settings (Proxy :: Proxy response)
 
+-- | Servant < 0.5.0, match 'Post', make 'TypeSpec's.
 instance (MkTypeSpecs response) =>
   HasGenericSpecs (Post contentTypes response) where
 
@@ -109,6 +118,7 @@ instance (MkTypeSpecs response) =>
 
 -- * combinators
 
+-- | Match 'ReqBody' and '(:>)'.
 instance (MkTypeSpecs body, HasGenericSpecs api) =>
   HasGenericSpecs (ReqBody contentTypes body :> api) where
 
@@ -116,26 +126,31 @@ instance (MkTypeSpecs body, HasGenericSpecs api) =>
     mkTypeSpecs settings (Proxy :: Proxy body) ++
     collectRoundtripSpecs settings (Proxy :: Proxy api)
 
+-- | Match 'Symbol' and '(:>)'.
 instance HasGenericSpecs api => HasGenericSpecs ((path :: Symbol) :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 
 #if !MIN_VERSION_servant(0, 5, 0)
+-- | Servant < 0.5.0, match 'MatrixParam' and '(:>)'.
 instance HasGenericSpecs api => HasGenericSpecs (MatrixParam name a :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 #endif
 
-data TypeSpec
-  = TypeSpec {
-    typ :: TypeRep,
-    roundtrip :: Spec,
-    golden :: Spec
-  }
+-- | Data type to for holding tests and type representation of each route in a
+-- Servant API. A function can be used to pick which tests to run and return
+-- the type name for reference.
+data TypeSpec = TypeSpec {
+  typ       :: TypeRep
+, roundtrip :: Spec
+, golden    :: Spec
+}
 
--- 'mkTypeSpecs' has to be implemented as a method of a separate class, because we
+-- | 'mkTypeSpecs' has to be implemented as a method of a separate class, because we
 -- want to be able to have a specialized implementation for lists.
 class MkTypeSpecs a where
   mkTypeSpecs :: Settings -> Proxy a -> [TypeSpec]
 
+-- | Test JSON Serialization for non-wrapped types.
 instance (Typeable a, Eq a, Show a, Arbitrary a, ToJSON a, FromJSON a) => MkTypeSpecs a where
 
   mkTypeSpecs settings proxy = pure $
@@ -149,6 +164,7 @@ instance (Typeable a, Eq a, Show a, Arbitrary a, ToJSON a, FromJSON a) => MkType
 -- As we trust aeson to do the right thing for standard container types, we
 -- don't need to test that. (This speeds up test suites immensely.)
 
+-- | Test JSON serialization for '[]' types.
 instance {-# OVERLAPPING #-}
   (Eq a, Show a, Typeable a, Arbitrary a, ToJSON a, FromJSON a) =>
   MkTypeSpecs [a] where
@@ -163,6 +179,7 @@ instance {-# OVERLAPPING #-}
       proxy = Proxy :: Proxy a
       note = "(as element-type in [])"
 
+-- | Test JSON serialization for 'Maybe' types.
 instance {-# OVERLAPPING #-}
   (Eq a, Show a, Typeable a, Arbitrary a, ToJSON a, FromJSON a) =>
   MkTypeSpecs (Maybe a) where
@@ -177,7 +194,7 @@ instance {-# OVERLAPPING #-}
       proxy = Proxy :: Proxy a
       note = "(as element-type in Maybe)"
 
--- We trust aeson to be correct for ().
+-- | We trust aeson to be correct for ().
 instance {-# OVERLAPPING #-}
   MkTypeSpecs () where
 
