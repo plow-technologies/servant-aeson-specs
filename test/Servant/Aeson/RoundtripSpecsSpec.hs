@@ -91,9 +91,23 @@ spec = do
     it "works for Post" $ do
       usedTypes postApi `shouldBe` [boolRep]
 
+    it "ignores response headers" $ do
+      usedTypes responseHeadersApi `shouldBe` [boolRep]
+
+    it "traverses Capture" $ do
+      usedTypes captureApi `shouldBe` [boolRep]
+
+    it "traverses request headers" $ do
+      usedTypes requestHeadersApi `shouldBe` [boolRep]
+
+    it "traverses query params" $ do
+      usedTypes queryParamsApi `shouldBe` [boolRep]
+
     matrixParamTest
 
     noContentTest
+
+    authProtectTest
 
 reqBodyFailApi :: Proxy (ReqBody '[JSON] FaultyRoundtrip :> Get '[JSON] Bool)
 reqBodyFailApi = Proxy
@@ -115,6 +129,18 @@ faultyRoundtripRep = typeRep (Proxy :: Proxy FaultyRoundtrip)
 
 boolRep :: TypeRep
 boolRep = typeRep (Proxy :: Proxy Bool)
+
+responseHeadersApi :: Proxy (Post '[JSON] (Headers '[Header "Cookie" Int] Bool))
+responseHeadersApi= Proxy
+
+captureApi :: Proxy (Capture "number" Int :> Post '[JSON] Bool)
+captureApi = Proxy
+
+requestHeadersApi  :: Proxy (Header "Cookie" Int :> Post '[JSON] Bool)
+requestHeadersApi = Proxy
+
+queryParamsApi :: Proxy (QueryParam "foo" Int :> Post '[JSON] Bool)
+queryParamsApi = Proxy
 
 matrixParamTest :: Spec
 #if !MIN_VERSION_servant(0, 5, 0)
@@ -140,7 +166,6 @@ noContentApi = Proxy
 noContentTest = return ()
 #endif
 
-
 -- | Type where roundtrips don't work.
 data FaultyRoundtrip
   = FaultyRoundtrip {
@@ -159,3 +184,16 @@ instance FromJSON FaultyRoundtrip
 
 instance Arbitrary FaultyRoundtrip where
   arbitrary = FaultyRoundtrip <$> arbitrary <*> arbitrary
+
+
+authProtectTest :: Spec
+#if MIN_VERSION_servant(0, 5, 0)
+authProtectTest =  do
+  it "traverses AuthProtect" $ do
+    usedTypes authProtectApi `shouldBe` [boolRep]
+
+authProtectApi :: Proxy (AuthProtect "scheme" :> Post '[JSON] Bool)
+authProtectApi = Proxy
+#else
+authProtectTest = return ()
+#endif
