@@ -99,19 +99,37 @@ instance {-# OVERLAPPABLE #-}
 -- 'TypeSpec's.
 instance {-# OVERLAPPING #-}
   HasGenericSpecs (Verb (method :: StdMethod) returnStatus contentTypes NoContent) where
-
   collectRoundtripSpecs _ Proxy = []
+
+instance (MkTypeSpecs response) =>
+  HasGenericSpecs (Verb (method :: StdMethod) returnStatus contentTypes (Headers hs response)) where
+  collectRoundtripSpecs settings Proxy = mkTypeSpecs settings (Proxy :: Proxy response)
+
 #else
 -- | Servant < 0.5.0, match 'Get', make 'TypeSpec's.
-instance (MkTypeSpecs response) =>
+instance {-# OVERLAPPABLE #-}
+  (MkTypeSpecs response) =>
   HasGenericSpecs (Get contentTypes response) where
 
   collectRoundtripSpecs settings Proxy = do
     mkTypeSpecs settings (Proxy :: Proxy response)
 
 -- | Servant < 0.5.0, match 'Post', make 'TypeSpec's.
-instance (MkTypeSpecs response) =>
+instance {-# OVERLAPPABLE #-}
+  (MkTypeSpecs response) =>
   HasGenericSpecs (Post contentTypes response) where
+
+  collectRoundtripSpecs settings Proxy = mkTypeSpecs settings (Proxy :: Proxy response)
+
+instance {-# OVERLAPPING #-}
+  (MkTypeSpecs response) =>
+  HasGenericSpecs (Get contentTypes (Headers hs response)) where
+
+  collectRoundtripSpecs settings Proxy = mkTypeSpecs settings (Proxy :: Proxy response)
+
+instance {-# OVERLAPPING #-}
+  (MkTypeSpecs response) =>
+  HasGenericSpecs (Post contentTypes (Headers hs response)) where
 
   collectRoundtripSpecs settings Proxy = mkTypeSpecs settings (Proxy :: Proxy response)
 #endif
@@ -130,7 +148,20 @@ instance (MkTypeSpecs body, HasGenericSpecs api) =>
 instance HasGenericSpecs api => HasGenericSpecs ((path :: Symbol) :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 
-#if !MIN_VERSION_servant(0, 5, 0)
+instance HasGenericSpecs api  => HasGenericSpecs (Capture (sym :: Symbol) x :> api) where
+  collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
+
+instance HasGenericSpecs api  => HasGenericSpecs (QueryParam (sym :: Symbol) x :> api) where
+  collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
+
+instance HasGenericSpecs api  => HasGenericSpecs (Header (sym :: Symbol) x :> api) where
+  collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
+
+#if MIN_VERSION_servant(0, 5, 0)
+-- | Servant >= 0.5.0, match 'AuthProtect' and ':>'.
+instance HasGenericSpecs api => HasGenericSpecs (AuthProtect (sym :: Symbol) :> api) where
+  collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
+#else
 -- | Servant < 0.5.0, match 'MatrixParam' and ':>'.
 instance HasGenericSpecs api => HasGenericSpecs (MatrixParam name a :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
