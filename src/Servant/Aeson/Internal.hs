@@ -86,8 +86,7 @@ instance (HasGenericSpecs a, HasGenericSpecs b) => HasGenericSpecs (a :<|> b) wh
 -- * http methods
 
 #if MIN_VERSION_servant(0, 5, 0)
--- | Servant >= 0.5.0, pattern match on 'StdMethod' and response with content,
--- make 'TypeSpec's.
+-- | Servant >= 0.5.0, pattern match on 'StdMethod' and response with content.
 instance {-# OVERLAPPABLE #-}
   (MkTypeSpecs response) =>
   HasGenericSpecs (Verb (method :: StdMethod) returnStatus contentTypes response) where
@@ -95,18 +94,18 @@ instance {-# OVERLAPPABLE #-}
   collectRoundtripSpecs settings Proxy = do
     mkTypeSpecs settings (Proxy :: Proxy response)
 
--- | Servant >= 0.5.0, pattern match on 'StdMethod' and 'NoContent', make
--- 'TypeSpec's.
+-- | Servant >= 0.5.0, pattern match on 'StdMethod' and 'NoContent'.
 instance {-# OVERLAPPING #-}
   HasGenericSpecs (Verb (method :: StdMethod) returnStatus contentTypes NoContent) where
   collectRoundtripSpecs _ Proxy = []
 
+-- | Servant >= 0.5.0, pattern match on 'StdMethod' and 'Headers'.
 instance (MkTypeSpecs response) =>
   HasGenericSpecs (Verb (method :: StdMethod) returnStatus contentTypes (Headers hs response)) where
   collectRoundtripSpecs settings Proxy = mkTypeSpecs settings (Proxy :: Proxy response)
 
 #else
--- | Servant < 0.5.0, match 'Get', make 'TypeSpec's.
+-- | Servant < 0.5.0, match 'Get' with response.
 instance {-# OVERLAPPABLE #-}
   (MkTypeSpecs response) =>
   HasGenericSpecs (Get contentTypes response) where
@@ -114,19 +113,21 @@ instance {-# OVERLAPPABLE #-}
   collectRoundtripSpecs settings Proxy = do
     mkTypeSpecs settings (Proxy :: Proxy response)
 
--- | Servant < 0.5.0, match 'Post', make 'TypeSpec's.
+-- | Servant < 0.5.0, match 'Post' with response.
 instance {-# OVERLAPPABLE #-}
   (MkTypeSpecs response) =>
   HasGenericSpecs (Post contentTypes response) where
 
   collectRoundtripSpecs settings Proxy = mkTypeSpecs settings (Proxy :: Proxy response)
 
+-- | Servant < 0.5.0, match 'Get' with 'Headers'.
 instance {-# OVERLAPPING #-}
   (MkTypeSpecs response) =>
   HasGenericSpecs (Get contentTypes (Headers hs response)) where
 
   collectRoundtripSpecs settings Proxy = mkTypeSpecs settings (Proxy :: Proxy response)
 
+-- | Servant < 0.5.0, match 'Post' with 'Headers'.
 instance {-# OVERLAPPING #-}
   (MkTypeSpecs response) =>
   HasGenericSpecs (Post contentTypes (Headers hs response)) where
@@ -148,12 +149,15 @@ instance (MkTypeSpecs body, HasGenericSpecs api) =>
 instance HasGenericSpecs api => HasGenericSpecs ((path :: Symbol) :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 
+-- | Match 'Capture' and ':>'.
 instance HasGenericSpecs api  => HasGenericSpecs (Capture (sym :: Symbol) x :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 
+-- | Match 'QueryParam' and ':>'.
 instance HasGenericSpecs api  => HasGenericSpecs (QueryParam (sym :: Symbol) x :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 
+-- | Match 'Header' and ':>'.
 instance HasGenericSpecs api  => HasGenericSpecs (Header (sym :: Symbol) x :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 

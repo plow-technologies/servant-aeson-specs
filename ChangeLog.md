@@ -1,5 +1,9 @@
 # Revision history for servant-aeson-specs
 
+## 0.5.1.0  -- 2016-09-05
+
+* Add missing pattern matches for `HasGenericSpecs`.
+
 ## 0.5.0.0  -- 2016-09-05
 
 * Remove `Test.Aeson.GenericSpecs`, `Test.Aeson.Internal.GoldenSpecs` and `Test.Aeson.Internal.RoundtripSpecs`.
