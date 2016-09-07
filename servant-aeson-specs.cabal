@@ -3,7 +3,7 @@
 -- see: https://github.com/sol/hpack
 
 name:           servant-aeson-specs
-version:        0.5.1.0
+version:        0.5.1.1
 synopsis:       generic tests for aeson serialization in servant
 description:    tests for aeson serialization in servant
 category:       Web
@@ -37,8 +37,8 @@ library
     , filepath
     , random
     , aeson-pretty
-    , quickcheck-arbitrary-adt == 0.2.0.0
-    , hspec-golden-aeson == 0.2.0.1
+    , quickcheck-arbitrary-adt == 0.2.*
+    , hspec-golden-aeson == 0.2.*
   exposed-modules:
       Servant.Aeson.GenericSpecs
       Servant.Aeson.Internal
@@ -62,8 +62,8 @@ test-suite spec
     , filepath
     , random
     , aeson-pretty
-    , quickcheck-arbitrary-adt == 0.2.0.0
-    , hspec-golden-aeson == 0.2.0.1
+    , quickcheck-arbitrary-adt == 0.2.*
+    , hspec-golden-aeson == 0.2.*
     , hspec-core
     , temporary
     , doctest
@@ -72,8 +72,6 @@ test-suite spec
     , quickcheck-instances
     , string-conversions
     , text
-    , quickcheck-arbitrary-adt == 0.2.0.0
-    , hspec-golden-aeson == 0.2.0.1
   other-modules:
       DoctestSpec
       Servant.Aeson.GoldenSpecsSpec
