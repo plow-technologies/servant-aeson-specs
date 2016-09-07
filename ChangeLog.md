@@ -1,5 +1,9 @@
 # Revision history for servant-aeson-specs
 
+## 0.5.1.1  -- 2016-09-07
+
+* Lighten depedency restriction for hspec-golden-aeson and quickcheck-arbitrary-adt.
+
 ## 0.5.1.0  -- 2016-09-05
 
 * Add missing pattern matches for `HasGenericSpecs`.
