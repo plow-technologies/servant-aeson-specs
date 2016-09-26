@@ -32,7 +32,7 @@ library
     , bytestring
     , hspec
     , QuickCheck
-    , servant == 0.4.* || == 0.5.* || == 0.6.* || == 0.7.* || == 0.8.*
+    , servant >= 0.4 && < 0.10
     , directory
     , filepath
     , random
@@ -57,7 +57,7 @@ test-suite spec
     , bytestring
     , hspec
     , QuickCheck
-    , servant == 0.4.* || == 0.5.* || == 0.6.* || == 0.7.* || == 0.8.*
+    , servant >= 0.4 && < 0.10
     , directory
     , filepath
     , random
@@ -72,6 +72,8 @@ test-suite spec
     , quickcheck-instances
     , string-conversions
     , text
+    , quickcheck-arbitrary-adt == 0.2.*
+    , hspec-golden-aeson == 0.2.*
   other-modules:
       DoctestSpec
       Servant.Aeson.GoldenSpecsSpec

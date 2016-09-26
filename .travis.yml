@@ -10,6 +10,7 @@ env:
   - STACK_YAML=stack-servant-0.5.yaml
   - STACK_YAML=stack-servant-0.6.yaml
   - STACK_YAML=stack-servant-0.7.yaml
+  - STACK_YAML=stack-servant-0.8.yaml
   - STACK_YAML=stack.yaml
 
 install:
