@@ -4,7 +4,6 @@
 
 name:           servant-aeson-specs
 version:        0.5.1.1
-x-revision:     1
 synopsis:       generic tests for aeson serialization in servant
 description:    tests for aeson serialization in servant
 category:       Web
@@ -73,6 +72,8 @@ test-suite spec
     , quickcheck-instances
     , string-conversions
     , text
+    , quickcheck-arbitrary-adt == 0.2.*
+    , hspec-golden-aeson == 0.2.*
   other-modules:
       DoctestSpec
       Servant.Aeson.GoldenSpecsSpec
