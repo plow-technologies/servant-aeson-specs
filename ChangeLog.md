@@ -1,5 +1,9 @@
 # Revision history for servant-aeson-specs
 
+## 0.5.2.0  -- 2016-09-26
+
+* Support servant-0.9.
+
 ## 0.5.1.1  -- 2016-09-07
 
 * Lighten depedency restriction for hspec-golden-aeson and quickcheck-arbitrary-adt.
