@@ -1,8 +1,5 @@
-resolver: lts-6.4
+resolver: lts-8.0
 packages:
   - '.'
 extra-deps:
-  - servant-0.9
-  - http-api-data-0.3
-  - quickcheck-arbitrary-adt-0.2.0.0
-  - hspec-golden-aeson-0.2.0.2
+  - servant-0.10
