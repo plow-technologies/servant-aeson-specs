@@ -153,8 +153,16 @@ instance HasGenericSpecs api => HasGenericSpecs ((path :: Symbol) :> api) where
 instance HasGenericSpecs api  => HasGenericSpecs (Capture (sym :: Symbol) x :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 
+-- | Match 'QueryFlag' and ':>'.
+instance HasGenericSpecs api  => HasGenericSpecs (QueryFlag (sym :: Symbol) :> api) where
+  collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
+
 -- | Match 'QueryParam' and ':>'.
 instance HasGenericSpecs api  => HasGenericSpecs (QueryParam (sym :: Symbol) x :> api) where
+  collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
+
+-- | Match 'QueryParams' and ':>'.
+instance HasGenericSpecs api  => HasGenericSpecs (QueryParams (sym :: Symbol) x :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 
 -- | Match 'Header' and ':>'.
