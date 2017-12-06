@@ -3,3 +3,4 @@ packages:
   - '.'
 extra-deps:
   - servant-0.10
+  - hspec-golden-aeson-0.3.1.0
