@@ -44,8 +44,8 @@ tests:
       - quickcheck-instances
       - string-conversions
       - text
-      - quickcheck-arbitrary-adt == 0.3.*
-      - hspec-golden-aeson == 0.5.*
+      - quickcheck-arbitrary-adt >= 0.3.1.0 && < 0.4
+      - hspec-golden-aeson >= 0.5.1.0 && < 0.6
 
 library:
   source-dirs:
