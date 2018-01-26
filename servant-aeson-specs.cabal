@@ -1,9 +1,11 @@
--- This file has been generated from package.yaml by hpack version 0.17.1.
+-- This file has been generated from package.yaml by hpack version 0.20.0.
 --
 -- see: https://github.com/sol/hpack
+--
+-- hash: 7a81d7ad4e27d69dafd0b4225eae17ffe38536a3fc7dca455d1bd5ffe27930b9
 
 name:           servant-aeson-specs
-version:        0.5.3.0
+version:        0.6.0.0
 synopsis:       generic tests for aeson serialization in servant
 description:    tests for aeson serialization in servant
 category:       Web
@@ -27,21 +29,23 @@ library
       src
   ghc-options: -Wall -fno-warn-name-shadowing
   build-depends:
-      base < 5
+      QuickCheck
     , aeson
+    , aeson-pretty
+    , base <5
     , bytestring
-    , hspec
-    , QuickCheck
-    , servant >= 0.4 && < 0.11
     , directory
     , filepath
+    , hspec
+    , hspec-golden-aeson ==0.5.*
+    , quickcheck-arbitrary-adt ==0.3.*
     , random
-    , aeson-pretty
-    , quickcheck-arbitrary-adt == 0.3.*
-    , hspec-golden-aeson == 0.5.*
+    , servant >=0.4 && <0.12
   exposed-modules:
       Servant.Aeson.GenericSpecs
       Servant.Aeson.Internal
+  other-modules:
+      Paths_servant_aeson_specs
   default-language: Haskell2010
 
 test-suite spec
@@ -52,28 +56,26 @@ test-suite spec
       src
   ghc-options: -Wall -fno-warn-name-shadowing
   build-depends:
-      base < 5
+      QuickCheck
     , aeson
-    , bytestring
-    , hspec
-    , QuickCheck
-    , servant >= 0.4 && < 0.11
-    , directory
-    , filepath
-    , random
     , aeson-pretty
-    , quickcheck-arbitrary-adt == 0.3.*
-    , hspec-golden-aeson == 0.5.*
-    , hspec-core
-    , temporary
+    , base <5
+    , bytestring
+    , directory
     , doctest
+    , filepath
+    , hspec
+    , hspec-core
+    , hspec-golden-aeson >=0.5.1.0 && <0.6
     , mockery
-    , silently
+    , quickcheck-arbitrary-adt >=0.3.1.0 && <0.4
     , quickcheck-instances
+    , random
+    , servant >=0.4 && <0.12
+    , silently
     , string-conversions
+    , temporary
     , text
-    , quickcheck-arbitrary-adt >= 0.3.1.0 && < 0.4
-    , hspec-golden-aeson >= 0.5.1.0 && < 0.6
   other-modules:
       DoctestSpec
       Servant.Aeson.GoldenSpecsSpec
@@ -81,4 +83,5 @@ test-suite spec
       Test.Utils
       Servant.Aeson.GenericSpecs
       Servant.Aeson.Internal
+      Paths_servant_aeson_specs
   default-language: Haskell2010
