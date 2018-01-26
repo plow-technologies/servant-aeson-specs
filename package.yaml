@@ -1,5 +1,5 @@
 name: servant-aeson-specs
-version: 0.6.0.0
+version: 0.6.1.0
 synopsis: generic tests for aeson serialization in servant
 description: tests for aeson serialization in servant
 category: Web
