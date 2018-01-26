@@ -1,3 +1,4 @@
 .stack-work-servant-*
 .stack-work
 *.tar.gz
+*.cabal
