@@ -1,5 +1,5 @@
 name: servant-aeson-specs
-version: 0.6.1.0
+version: 0.6.2.0
 synopsis: generic tests for aeson serialization in servant
 description: tests for aeson serialization in servant
 category: Web
@@ -18,13 +18,13 @@ dependencies:
   - bytestring
   - hspec
   - QuickCheck
-  - servant >= 0.4 && < 0.13
+  - servant >= 0.4 
   - directory
   - filepath
   - random
   - aeson-pretty
-  - quickcheck-arbitrary-adt == 0.3.*
-  - hspec-golden-aeson == 0.5.*
+  - quickcheck-arbitrary-adt >= 0.3.0
+  - hspec-golden-aeson >= 0.5.0
 
 ghc-options:
   -Wall -fno-warn-name-shadowing
@@ -44,8 +44,6 @@ tests:
       - quickcheck-instances
       - string-conversions
       - text
-      - quickcheck-arbitrary-adt >= 0.3.1.0 && < 0.4
-      - hspec-golden-aeson >= 0.5.1.0 && < 0.6
 
 library:
   source-dirs:
