@@ -165,8 +165,8 @@ instance HasGenericSpecs api  => HasGenericSpecs (QueryParam (sym :: Symbol) x :
 instance HasGenericSpecs api  => HasGenericSpecs (QueryParams (sym :: Symbol) x :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 
--- | Match 'Header' and ':>'.
-instance HasGenericSpecs api  => HasGenericSpecs (Header (sym :: Symbol) x :> api) where
+-- | Match 'Header'' and ':>'.
+instance HasGenericSpecs api  => HasGenericSpecs (Header' (mods :: [*]) (sym :: Symbol) x :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 
 #if MIN_VERSION_servant(0, 5, 0)
