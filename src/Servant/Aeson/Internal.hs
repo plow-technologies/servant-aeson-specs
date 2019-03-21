@@ -29,6 +29,7 @@ import           GHC.TypeLits
 import           Servant.API
 import           Test.Hspec
 import           Test.QuickCheck
+import           Servant.Multipart
 
 import           Test.Aeson.Internal.GoldenSpecs
 import           Test.Aeson.Internal.RoundtripSpecs
@@ -140,6 +141,14 @@ instance {-# OVERLAPPING #-}
 -- | Match 'ReqBody' and ':>'.
 instance (MkTypeSpecs body, HasGenericSpecs api) =>
   HasGenericSpecs (ReqBody contentTypes body :> api) where
+
+  collectRoundtripSpecs settings Proxy =
+    mkTypeSpecs settings (Proxy :: Proxy body) ++
+    collectRoundtripSpecs settings (Proxy :: Proxy api)
+
+-- | Match 'ReqBody' and ':>'.
+instance (MkTypeSpecs body, HasGenericSpecs api) =>
+  HasGenericSpecs (MultipartForm tag body :> api) where
 
   collectRoundtripSpecs settings Proxy =
     mkTypeSpecs settings (Proxy :: Proxy body) ++

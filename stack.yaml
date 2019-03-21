@@ -4,3 +4,5 @@ packages:
 extra-deps:
   - hspec-golden-aeson-0.5.1.0
   - quickcheck-arbitrary-adt-0.3.1.0
+  - servant-multipart-0.11.2
+
