@@ -29,6 +29,7 @@ import           GHC.TypeLits
 import           Servant.API
 import           Test.Hspec
 import           Test.QuickCheck
+import           Servant.Multipart
 
 import           Test.Aeson.Internal.GoldenSpecs
 import           Test.Aeson.Internal.RoundtripSpecs
@@ -145,6 +146,14 @@ instance (MkTypeSpecs body, HasGenericSpecs api) =>
     mkTypeSpecs settings (Proxy :: Proxy body) ++
     collectRoundtripSpecs settings (Proxy :: Proxy api)
 
+-- | Match 'ReqBody' and ':>'.
+instance (MkTypeSpecs body, HasGenericSpecs api) =>
+  HasGenericSpecs (MultipartForm tag body :> api) where
+
+  collectRoundtripSpecs settings Proxy =
+    mkTypeSpecs settings (Proxy :: Proxy body) ++
+    collectRoundtripSpecs settings (Proxy :: Proxy api)
+
 -- | Match 'Symbol' and ':>'.
 instance HasGenericSpecs api => HasGenericSpecs ((path :: Symbol) :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
@@ -165,8 +174,8 @@ instance HasGenericSpecs api  => HasGenericSpecs (QueryParam (sym :: Symbol) x :
 instance HasGenericSpecs api  => HasGenericSpecs (QueryParams (sym :: Symbol) x :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 
--- | Match 'Header' and ':>'.
-instance HasGenericSpecs api  => HasGenericSpecs (Header (sym :: Symbol) x :> api) where
+-- | Match 'Header'' and ':>'.
+instance HasGenericSpecs api  => HasGenericSpecs (Header' (mods :: [*]) (sym :: Symbol) x :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 
 #if MIN_VERSION_servant(0, 5, 0)
