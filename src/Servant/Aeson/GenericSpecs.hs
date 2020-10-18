@@ -48,7 +48,7 @@ Here's an example:
 :}
 
 
->>> type Api = "post" :> ReqBody '[JSON] Foo :> Get '[JSON] Bar
+>>> type Api = "post" :> Summary "What a great API!" :> Description "Wow, really, this API is great" :> ReqBody '[JSON] Foo :> Get '[JSON] Bar
 >>> let api = Proxy :: Proxy Api
 >>> hspec $ apiRoundtripSpecs api
 <BLANKLINE>

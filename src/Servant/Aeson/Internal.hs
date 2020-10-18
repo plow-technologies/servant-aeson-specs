@@ -169,6 +169,14 @@ instance HasGenericSpecs api  => HasGenericSpecs (QueryParams (sym :: Symbol) x 
 instance HasGenericSpecs api  => HasGenericSpecs (Header (sym :: Symbol) x :> api) where
   collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
 
+-- | Match 'Summary' and ':>'.
+instance HasGenericSpecs api  => HasGenericSpecs (Summary (sym :: Symbol) :> api) where
+  collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
+
+-- | Match 'Description' and ':>'.
+instance HasGenericSpecs api  => HasGenericSpecs (Description (sym :: Symbol) :> api) where
+  collectRoundtripSpecs settings Proxy = collectRoundtripSpecs settings (Proxy :: Proxy api)
+
 #if MIN_VERSION_servant(0, 5, 0)
 -- | Servant >= 0.5.0, match 'AuthProtect' and ':>'.
 instance HasGenericSpecs api => HasGenericSpecs (AuthProtect (sym :: Symbol) :> api) where
